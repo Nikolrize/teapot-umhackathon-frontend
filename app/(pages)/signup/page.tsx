@@ -8,12 +8,11 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import Link from "next/link";
 
 export default function SignUp() {
   return (
     <div className="w-full h-screen flex items-center justify-center p-15">
-      <Card className="w-100 gap-6">
+      <Card className="w-[30vw] gap-6">
         <CardHeader>
           <CardTitle>Sign Up</CardTitle>
           <CardDescription>
@@ -39,12 +38,14 @@ export default function SignUp() {
           </div>
 
           <div className="flex flex-col justify-center items-center gap-2">
-            <Button className="w-full" size={"lg"}>Create Account</Button>
+            <Button className="w-full" size={"lg"}>
+              Create Account
+            </Button>
             <div className="flex gap-2 text-muted-foreground">
               <span>Already have an account?</span>
-              <Link href={"/"} className="underline">
+              <a href={"/login"} className="underline cursor-pointer">
                 Log in
-              </Link>
+              </a>
             </div>
           </div>
         </CardContent>

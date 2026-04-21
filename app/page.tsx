@@ -1,48 +1,5 @@
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export default function Home() {
-  return (
-    <main className="w-full h-screen flex items-center justify-center p-15">
-      <Card className="w-100 gap-6">
-        <CardHeader>
-          <CardTitle>Login</CardTitle>
-          <CardDescription>
-            Enter your username and password to login to your account
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-6">
-          <div className="flex flex-col gap-2">
-            <Label>Username</Label>
-            <Input id="username" type="text" required />
-          </div>
-          <div className="flex flex-col gap-2">
-            <Label>Password</Label>
-            <Input id="password" type="password" required />
-          </div>
-
-          <div className="flex flex-col justify-center items-center gap-2">
-            <Button className="w-full" size={"lg"}>
-              Login
-            </Button>
-            <div className="flex gap-2 text-muted-foreground">
-              <span>Don't have an account?</span>
-              <Link href={"/signup"} className="underline">
-                Sign up
-              </Link>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-    </main>
-  );
+  redirect("/login");
 }
