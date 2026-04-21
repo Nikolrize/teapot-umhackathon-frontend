@@ -73,7 +73,7 @@ export default function Login() {
                 <Button
                   className="w-full"
                   size={"lg"}
-                  onClick={() => redirect("/client/home")}
+                  onClick={() => redirect("/public-home")}
                 >
                   Login
                 </Button>
