@@ -29,6 +29,6 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-, "app/(public)/public-home"  ],
+, "app/(public)/client-home"  ],
   "exclude": ["node_modules"]
 }
