@@ -73,7 +73,7 @@ export default function Login() {
                 <Button
                   className="w-full"
                   size={"lg"}
-                  onClick={() => redirect("/public-home")}
+                  onClick={() => redirect("/client-home")}
                 >
                   Login
                 </Button>
@@ -143,7 +143,7 @@ export default function Login() {
             <CardSwapCard>
               <h3 className="flex gap-2 p-2 border-b-1 border-white">
                 <Coins />
-                Profit Optimizer
+                Profit Optimiser
               </h3>
               <p>Picture</p>
             </CardSwapCard>
