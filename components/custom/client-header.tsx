@@ -32,12 +32,15 @@ import { Label } from "../ui/label";
 export default function ClientHeader() {
   return (
     <header className="w-full flex border-b-1 border-muted p-4 items-center justify-between">
-      <div className="flex gap-4">
+      <div className="flex gap-4 items-center">
         <SidebarTrigger />
         <Separator orientation="vertical" />
-        <SearchCommandDialog />
+        <h1 className="font-bold text-brand-primary">Teapot</h1>
       </div>
-      <CreditPopover />
+      <div className="flex gap-4 items-center">
+        <SearchCommandDialog />
+        <CreditPopover />
+      </div>
     </header>
   );
 }

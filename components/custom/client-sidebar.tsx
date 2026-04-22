@@ -5,6 +5,7 @@ import {
   Home,
   LayoutDashboard,
   ListChevronsUpDown,
+  MessageCircleMore,
 } from "lucide-react";
 import {
   Sidebar,
@@ -41,6 +42,12 @@ export default function ClientSidebar() {
               <SidebarMenuButton>
                 <LayoutDashboard />
                 Dashboard
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton>
+                <MessageCircleMore />
+                Chat
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
