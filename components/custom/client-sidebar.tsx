@@ -3,6 +3,7 @@ import {
   Folder,
   HatGlasses,
   Home,
+  LayoutDashboard,
   ListChevronsUpDown,
 } from "lucide-react";
 import {
@@ -34,6 +35,12 @@ export default function ClientSidebar() {
               <SidebarMenuButton>
                 <Home />
                 Home
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton>
+                <LayoutDashboard />
+                Dashboard
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
@@ -85,7 +92,7 @@ export default function ClientSidebar() {
 
 export function ClientProfile() {
   return (
-    <SidebarMenuButton size={"lg"}>
+    <SidebarMenuButton size={"lg"} className="bg-muted hover:ring-1 hover:ring-muted-foreground">
       <div className="flex flex-1 items-center gap-2">
         <Avatar>
           <AvatarImage src="/icons/user.png" alt="user-png" />

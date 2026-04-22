@@ -10,7 +10,7 @@ export default function ClientLayout({
   return (
     <SidebarProvider>
       <ClientSidebar />
-      <div className="min-h-full flex flex-col">
+      <div className="min-h-full w-full flex flex-col">
         <ClientHeader />
         {children}
       </div>
