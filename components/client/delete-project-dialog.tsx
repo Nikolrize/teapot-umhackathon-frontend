@@ -11,7 +11,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
-import { ProjectFormValues } from "@/app/interfaces/client-interface";
+import { ProjectFormValues } from "@/interfaces/client-interface";
 
 type DeleteProjectDialogProps = {
   children: ReactNode;

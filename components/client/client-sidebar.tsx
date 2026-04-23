@@ -161,20 +161,30 @@ export function ClientProfilePopover() {
           </PopoverTitle>
         </PopoverHeader>
 
-        <Button variant={"ghost"} className="flex gap-2 justify-start">
-          <CircleUser className="text-muted-foreground" /> Account
-        </Button>
-        <Button variant={"ghost"} className="flex gap-2 justify-start">
-          <Settings className="text-muted-foreground" /> Settings
-        </Button>
-        <Button variant={"ghost"} className="flex gap-2 justify-start">
-          <CreditCard className="text-muted-foreground" /> Subscriptions
-        </Button>
+        <Link href={"/client-account"}>
+          <Button variant={"ghost"} className="flex gap-2 justify-start w-full">
+            <CircleUser className="text-muted-foreground" /> Account{" "}
+          </Button>
+        </Link>
+
+        <Link href={"/client-settings"}>
+          <Button variant={"ghost"} className="flex gap-2 justify-start w-full">
+            <Settings className="text-muted-foreground" /> Settings
+          </Button>
+        </Link>
+
+        <Link href={"/client-subscriptions"}>
+          <Button variant={"ghost"} className="flex gap-2 justify-start w-full">
+            <CreditCard className="text-muted-foreground" /> Subscriptions
+          </Button>
+        </Link>
 
         <Separator />
-        <Button variant={"ghost"} className="flex gap-2 justify-start">
-          <LogOut className="text-muted-foreground" /> Log out
-        </Button>
+        <a href={"/"}>
+          <Button variant={"ghost"} className="flex gap-2 justify-start w-full">
+            <LogOut className="text-muted-foreground" /> Log out
+          </Button>{" "}
+        </a>
       </PopoverContent>
     </Popover>
   );

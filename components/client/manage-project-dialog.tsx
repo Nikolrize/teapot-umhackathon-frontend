@@ -22,14 +22,11 @@ import {
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
 import { Slider } from "../ui/slider";
-import {
-  Control,
-  Controller,
-  useForm,
-  UseFormGetValues,
-} from "react-hook-form";
+import { Control, Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { ProjectFormValues } from "@/app/interfaces/client-interface";
+import { ProjectFormValues } from "@/interfaces/client-interface";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { projectSchema } from "@/schemas/client-schemas";
 
 type Mode = "create" | "edit";
 
@@ -51,9 +48,9 @@ export default function ManageProjectDialog({
     register,
     handleSubmit,
     reset,
-    getValues,
     formState: { errors },
   } = useForm<ProjectFormValues>({
+    resolver: zodResolver(projectSchema),
     defaultValues:
       mode === "edit" && projectData
         ? projectData
@@ -116,7 +113,7 @@ export default function ManageProjectDialog({
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="min-w-3xl">
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <DialogHeader>
             <DialogTitle className="text-brand-primary">
               {mode === "edit" ? "Edit Project" : "Create New Project"}
@@ -131,14 +128,9 @@ export default function ManageProjectDialog({
             {/* Project Name */}
             <Label>Project Name:</Label>
             <div className="flex flex-col gap-2">
-              <Input
-                {...register("projectName", {
-                  required: "Project name is required",
-                })}
-                placeholder="Project 1"
-              />
+              <Input {...register("projectName")} placeholder="Project 1" />
               {errors.projectName && (
-                <span className="text-red-500 text-xs">
+                <span className="text-destructive text-xs">
                   {errors.projectName.message}
                 </span>
               )}
@@ -155,14 +147,9 @@ export default function ManageProjectDialog({
             {/* Business Name */}
             <Label>Business Name:</Label>
             <div className="flex flex-col gap-2">
-              <Input
-                {...register("businessName", {
-                  required: "Business name is required",
-                })}
-                placeholder="Company A"
-              />
+              <Input {...register("businessName")} placeholder="Company A" />
               {errors.businessName && (
-                <span className="text-red-500 text-xs">
+                <span className="text-destructive text-xs">
                   {errors.businessName.message}
                 </span>
               )}
@@ -174,24 +161,24 @@ export default function ManageProjectDialog({
             <Label>Business Context:</Label>
             <BusinessContextDialog control={control} />
             <Label>Budget Range:</Label>
-            <BudgetRangeSlider control={control} getValues={getValues} />
+            <BudgetRangeSlider control={control} />
 
             {/* Goal */}
             <Label>Goal:</Label>
             <div className="flex flex-col gap-2">
               <Input
-                {...register("goal", { required: "Goal is required" })}
+                {...register("goal")}
                 placeholder="Maximise ROI / Reduce Cost / Scale Fast"
               />
               {errors.goal && (
-                <span className="text-red-500 text-xs">
+                <span className="text-destructive text-xs">
                   {errors.goal.message}
                 </span>
               )}
             </div>
           </div>
 
-          <div className="flex gap-2 justify-center">
+          <div className="flex gap-2 justify-end">
             <DialogClose asChild>
               <Button>Cancel</Button>
             </DialogClose>
@@ -215,7 +202,6 @@ export function BusinessTypeSelect({
     <Controller
       control={control}
       name="businessType"
-      rules={{ required: "Business type is required" }}
       render={({ field, fieldState }) => (
         <div className="flex flex-col gap-2">
           <Select onValueChange={field.onChange} value={field.value} required>
@@ -237,7 +223,7 @@ export function BusinessTypeSelect({
           </Select>
 
           {fieldState.error && (
-            <span className="text-red-500 text-xs">
+            <span className="text-destructive text-xs">
               {fieldState.error.message}
             </span>
           )}
@@ -257,7 +243,6 @@ export function BusinessContextDialog({
     <Controller
       control={control}
       name="businessContext"
-      rules={{ required: "Business context is required" }}
       render={({ field, fieldState }) => (
         <Dialog>
           <div className="flex flex-col gap-2">
@@ -270,7 +255,7 @@ export function BusinessContextDialog({
               />
             </DialogTrigger>
             {fieldState.error && (
-              <span className="text-red-500 text-xs">
+              <span className="text-destructive text-xs">
                 {fieldState.error.message}
               </span>
             )}
@@ -312,10 +297,8 @@ export function BusinessContextDialog({
 
 function BudgetRangeSlider({
   control,
-  getValues,
 }: {
   control: Control<ProjectFormValues>;
-  getValues: UseFormGetValues<ProjectFormValues>;
 }) {
   return (
     <div className="flex gap-2 w-full">
@@ -325,11 +308,6 @@ function BudgetRangeSlider({
         <Controller
           control={control}
           name="budgetMin"
-          rules={{
-            validate: (value) =>
-              value <= getValues("budgetMax") ||
-              "Min must be less than or equal to Max",
-          }}
           render={({ field, fieldState }) => (
             <div className="flex flex-col gap-2">
               <Slider
@@ -345,7 +323,7 @@ function BudgetRangeSlider({
               </span>
 
               {fieldState.error && (
-                <span className="text-red-500 text-xs">
+                <span className="text-destructive text-xs">
                   {fieldState.error.message}
                 </span>
               )}
@@ -360,11 +338,6 @@ function BudgetRangeSlider({
         <Controller
           control={control}
           name="budgetMax"
-          rules={{
-            validate: (value) =>
-              value >= getValues("budgetMin") ||
-              "Max must be more than or equal to Min",
-          }}
           render={({ field, fieldState }) => (
             <div className="flex flex-col gap-2">
               <Slider
@@ -380,7 +353,7 @@ function BudgetRangeSlider({
               </span>
 
               {fieldState.error && (
-                <span className="text-red-500 text-xs">
+                <span className="text-destructive text-xs">
                   {fieldState.error.message}
                 </span>
               )}
