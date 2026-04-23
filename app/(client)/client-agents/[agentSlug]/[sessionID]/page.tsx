@@ -2,13 +2,32 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Send, Upload, X } from "lucide-react";
+import {
+  Blocks,
+  Bookmark,
+  BookMarked,
+  Pencil,
+  Send,
+  Trash,
+  Upload,
+  X,
+} from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
 import { useFileUpload } from "@/hooks/useFileUpload";
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { toast } from "sonner";
+import { Message } from "@/interfaces/client-interface";
+import EditReferenceDialog from "@/components/client/edit-reference-dialog";
+import DeleteReferenceDialog from "@/components/client/delete-reference-dialog";
 
 const dummyMessage: Message[] = [
   {
@@ -18,23 +37,24 @@ const dummyMessage: Message[] = [
   },
   {
     id: "2",
-    role: "ai",
-    content: "Hi! I'm your AI agent. How can I help you today?",
+    role: "agent",
+    content: "Hi! I'm your agent. How can I help you today?",
+  },
+  {
+    id: "3",
+    role: "agent",
+    content: "Hi! I'm your agent. How can I help you today?",
   },
 ];
-
-type Message = {
-  id: string;
-  role: "client" | "ai";
-  content?: string;
-  files?: File[];
-};
 
 export default function AgentSession() {
   const [messages, setMessages] = useState<Message[]>(dummyMessage);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [input, setInput] = useState("");
   const [files, setFiles] = useState<File[]>([]);
+  const [referenceMessages, setReferenceMessages] = useState<Message[]>([]);
+  const [dashboardMessages, setDashboardMessages] = useState<Message[]>([]);
+  const [refOpen, setRefOpen] = useState<boolean>(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -70,37 +90,70 @@ export default function AgentSession() {
 
     setIsProcessing(true);
 
-    // // mock AI response
+    // // mock agent response
     // setTimeout(() => {
-    //   const aiMessage: Message = {
+    //   const agentMessage: Message = {
     //     id: crypto.randomUUID(),
-    //     role: "ai",
-    //     content: "AI Message",
+    //     role: "agent",
+    //     content: "agent Message",
     //   };
 
-    //   setMessages((prev) => [...prev, aiMessage]);
+    //   setMessages((prev) => [...prev, agentMessage]);
     //   setIsProcessing(false);
     // }, 800);
   };
 
+  const handleAddReference = (msg: Message) => {
+    try {
+      setReferenceMessages((prev) => {
+        if (prev.some((m) => m.id === msg.id)) return prev;
+        return [...prev, msg];
+      });
+      toast.success("Added to references");
+    } catch (err) {
+      console.error(err);
+      toast.error("Unable to add to references");
+    }
+  };
+
+  const handleAddToDashboard = (msg: Message) => {
+    try {
+      setDashboardMessages((prev) => {
+        if (prev.some((m) => m.id === msg.id)) return prev;
+        return [...prev, msg];
+      });
+      toast.success("Added to dashboard");
+    } catch (err) {
+      console.error(err);
+      toast.error("Unable to add to dashboard");
+    }
+  };
+
   return (
-    <div className="flex flex-col items-center px-20 py-4 h-full overflow-hidden">
+    <div
+      className={cn(
+        refOpen ? "pl-20" : "px-20",
+        "flex justify-center items-center py-4 h-full overflow-hidden gap-4 transition-all duration-300 ease-in-out",
+      )}
+    >
       <div className="flex flex-col w-[50vw] h-full gap-4">
         {/* Messages */}
         <div className="flex-1 overflow-y-auto">
           {messages.map((msg) => (
             <div
               key={msg.id}
-              className={`flex p-2 ${
-                msg.role === "client" ? "justify-end" : "justify-start"
-              }`}
+              className={cn(
+                msg.role === "client" ? "justify-end" : "justify-start",
+                "flex p-2",
+              )}
             >
               {/* Chat Bubble */}
               <div
-                className={`px-4 py-2 rounded-2xl text-sm whitespace-pre-wrap ${
+                className={cn(
                   msg.role === "client" &&
-                  "bg-muted-foreground text-black rounded max-w-[60%] flex flex-col gap-2"
-                }`}
+                    "bg-muted-foreground text-black rounded max-w-[60%]",
+                  "px-4 py-2 rounded-2xl text-sm whitespace-pre-wrap flex flex-col gap-2",
+                )}
               >
                 {msg.content}
 
@@ -119,11 +172,41 @@ export default function AgentSession() {
                       </CardContent>
                     </Card>
                   ))}
+
+                {/* Add to Reference (Agent message only) */}
+                {msg.role === "agent" && (
+                  <div>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          size={"icon-sm"}
+                          variant="ghost"
+                          onClick={() => handleAddReference(msg)}
+                        >
+                          <Bookmark />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>Add as reference</TooltipContent>
+                    </Tooltip>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          size={"icon-sm"}
+                          variant="ghost"
+                          onClick={() => handleAddToDashboard(msg)}
+                        >
+                          <Blocks />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>Add to dashboard</TooltipContent>
+                    </Tooltip>
+                  </div>
+                )}
               </div>
             </div>
           ))}
 
-          {/* AI Processing */}
+          {/* Agent Processing */}
           {isProcessing && (
             <AnimatedShinyText className="px-4 text-sm">
               Processing your request...
@@ -184,28 +267,95 @@ export default function AgentSession() {
               </Label>
 
               <div className="flex gap-2">
-                <Button
-                  variant={"ghost"}
-                  size={"icon-lg"}
-                  onClick={openFileDialog}
-                >
-                  <Upload />
-                </Button>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant={"outline"}
+                      size="icon-lg"
+                      onClick={() => setRefOpen(!refOpen)}
+                    >
+                      <BookMarked />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>References</TooltipContent>
+                </Tooltip>
+
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant={"outline"}
+                      size={"icon-lg"}
+                      onClick={openFileDialog}
+                    >
+                      <Upload />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Upload files</TooltipContent>
+                </Tooltip>
 
                 <FileInput />
 
-                <Button
-                  onClick={handleSend}
-                  size={"icon-lg"}
-                  className="bg-brand-primary"
-                >
-                  <Send />
-                </Button>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      onClick={handleSend}
+                      size={"icon-lg"}
+                      className="bg-brand-primary"
+                    >
+                      <Send />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Send message</TooltipContent>
+                </Tooltip>
               </div>
             </div>
           </CardContent>
         </Card>
       </div>
+
+      {refOpen && (
+        <div className="flex-1 flex flex-col gap-4 border-l h-full overflow-y-auto p-4 bg-card">
+          <Label className="font-semibold text-brand-primary">References</Label>
+
+          {referenceMessages.length === 0 ? (
+            <span className="text-xs text-muted-foreground mt-2">
+              No references yet
+            </span>
+          ) : (
+            referenceMessages.map((msg) => (
+              <Card key={msg.id} className="text-xs">
+                <CardContent className="flex flex-col gap-2">
+                  <p className="whitespace-pre-wrap">{msg.content}</p>
+                  <span className="text-muted-foreground">From: Session 1</span>
+                  <div className="flex gap-2">
+                    <Tooltip>
+                      <EditReferenceDialog>
+                        <TooltipTrigger asChild>
+                          <Button variant={"outline"} size={"icon-xs"}>
+                            <Pencil />
+                          </Button>
+                        </TooltipTrigger>
+                      </EditReferenceDialog>
+                      <TooltipContent>Edit reference</TooltipContent>
+                    </Tooltip>
+
+                    <Tooltip>
+                      <DeleteReferenceDialog>
+                        <TooltipTrigger asChild>
+                          <Button variant={"destructive"} size={"icon-xs"}>
+                            <Trash />
+                          </Button>
+                        </TooltipTrigger>
+                      </DeleteReferenceDialog>
+                      <TooltipContent>Delete reference</TooltipContent>
+                    </Tooltip>
+                  </div>
+                </CardContent>
+              </Card>
+            ))
+          )}
+        </div>
+      )}
     </div>
   );
 }

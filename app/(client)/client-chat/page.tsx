@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { useFileUpload } from "@/hooks/useFileUpload";
+import { cn } from "@/lib/utils";
 
 type Message = {
   id: string;
@@ -87,17 +88,19 @@ export default function ClientChat() {
             return (
               <div
                 key={msg.id}
-                className={`flex p-2 ${
-                  isMe ? "justify-end" : "justify-start"
-                }`}
+                className={cn(
+                  isMe ? "justify-end" : "justify-start",
+                  "flex p-2",
+                )}
               >
                 {/* Chat Bubble */}
                 <div
-                  className={`px-4 py-2 rounded-2xl text-sm max-w-[60%] flex flex-col gap-2 whitespace-pre-wrap ${
+                  className={cn(
                     isMe
                       ? "bg-muted-foreground rounded-br-none"
-                      : "bg-secondary rounded-bl-none"
-                  }`}
+                      : "bg-secondary rounded-bl-none",
+                    "px-4 py-2 rounded-2xl text-sm max-w-[60%] flex flex-col gap-2 whitespace-pre-wrap",
+                  )}
                 >
                   {msg.content}
 

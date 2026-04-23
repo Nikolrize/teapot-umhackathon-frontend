@@ -15,3 +15,11 @@ export type AccountFormValues = {
   password: string;
   confirmPassword: string;
 };
+
+export type Message = {
+  id: string;
+  role: "client" | "agent";
+  content?: string;
+  files?: File[];
+  references?: string[];
+};
