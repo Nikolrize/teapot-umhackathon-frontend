@@ -91,39 +91,39 @@ export default function AgentSession() {
           {messages.map((msg) => (
             <div
               key={msg.id}
-              className={`flex gap-3 py-2 ${
+              className={`flex p-2 ${
                 msg.role === "client" ? "justify-end" : "justify-start"
               }`}
             >
-              {(msg.content || msg.files) && (
-                <div
-                  className={`px-4 py-2 rounded-2xl text-sm ${
-                    msg.role === "client" &&
-                    "bg-muted-foreground text-black rounded max-w-[60%] flex flex-col gap-2"
-                  }`}
-                >
-                  {msg.content}
-                  {msg.files &&
-                    msg.files.map((file, i) => (
-                      <Card
-                        key={i}
-                        className="py-1 text-xs cursor-pointer"
-                        onClick={() => handlePreview(file)}
-                      >
-                        <CardContent className="flex items-center gap-2">
-                          <span className="truncate">{file.name}</span>
+              {/* Chat Bubble */}
+              <div
+                className={`px-4 py-2 rounded-2xl text-sm whitespace-pre-wrap ${
+                  msg.role === "client" &&
+                  "bg-muted-foreground text-black rounded max-w-[60%] flex flex-col gap-2"
+                }`}
+              >
+                {msg.content}
 
-                          <Badge variant="secondary">
-                            {getFileLabel(file)}
-                          </Badge>
-                        </CardContent>
-                      </Card>
-                    ))}
-                </div>
-              )}
+                {/* File Preview */}
+                {msg.files &&
+                  msg.files.map((file, i) => (
+                    <Card
+                      key={i}
+                      className="py-1 text-xs cursor-pointer"
+                      onClick={() => handlePreview(file)}
+                    >
+                      <CardContent className="flex items-center gap-2">
+                        <span className="truncate">{file.name}</span>
+
+                        <Badge variant="secondary">{getFileLabel(file)}</Badge>
+                      </CardContent>
+                    </Card>
+                  ))}
+              </div>
             </div>
           ))}
 
+          {/* AI Processing */}
           {isProcessing && (
             <AnimatedShinyText className="px-4 text-sm">
               Processing your request...
@@ -138,6 +138,7 @@ export default function AgentSession() {
           <CardContent className="flex flex-col gap-2">
             {files.length > 0 && (
               <div className="flex flex-wrap gap-2">
+                {/* File Preview */}
                 {files.map((file, idx) => (
                   <Card
                     key={idx}
@@ -176,6 +177,7 @@ export default function AgentSession() {
               }}
             />
 
+            {/* Buttons */}
             <div className="flex justify-between items-end">
               <Label className="text-muted-foreground text-xs">
                 Estimated Credit Cost: 0
