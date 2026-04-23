@@ -1,3 +1,5 @@
+"use client";
+
 import {
   EllipsisVertical,
   Folder,
@@ -6,6 +8,8 @@ import {
   LayoutDashboard,
   ListChevronsUpDown,
   MessageCircleMore,
+  MoreHorizontal,
+  Plus,
 } from "lucide-react";
 import {
   Sidebar,
@@ -22,6 +26,15 @@ import {
 } from "../ui/sidebar";
 import { Avatar, AvatarBadge, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
+import CreateProjectDialog from "./create-project-dialog";
+import {
+  Popover,
+  PopoverContent,
+  PopoverHeader,
+  PopoverTitle,
+  PopoverTrigger,
+} from "../ui/popover";
+import { Separator } from "../ui/separator";
 
 export default function ClientSidebar() {
   return (
@@ -99,7 +112,10 @@ export default function ClientSidebar() {
 
 export function ClientProfile() {
   return (
-    <SidebarMenuButton size={"lg"} className="bg-muted hover:ring-1 hover:ring-muted-foreground">
+    <SidebarMenuButton
+      size={"lg"}
+      className="bg-muted hover:ring-1 hover:ring-muted-foreground"
+    >
       <div className="flex flex-1 items-center gap-2">
         <Avatar>
           <AvatarImage src="/icons/user.png" alt="user-png" />
@@ -115,16 +131,56 @@ export function ClientProfile() {
 
 export function ProjectSelector() {
   return (
-    <SidebarMenuButton size={"lg"}>
-      <div className="flex flex-1 items-center gap-2">
-        <Button asChild>
-          <div>
-            <Folder />
+    <Popover>
+      <PopoverTrigger asChild>
+        <SidebarMenuButton size={"lg"}>
+          <div className="flex flex-1 items-center gap-2">
+            <Button size={"icon-lg"} asChild>
+              <div>
+                <Folder />
+              </div>
+            </Button>
+            Project 1
+          </div>
+          <ListChevronsUpDown />
+        </SidebarMenuButton>
+      </PopoverTrigger>
+
+      <PopoverContent side="right">
+        <PopoverHeader>
+          <PopoverTitle className="text-muted-foreground text-xs">
+            Projects
+          </PopoverTitle>
+        </PopoverHeader>
+
+        <Button variant={"secondary"} size={"lg"}>
+          <div className="flex flex-1 items-center justify-between gap-2">
+            <div className="flex gap-2 items-center">
+              <Button size={"icon-sm"} asChild>
+                <div>
+                  <Folder />
+                </div>
+              </Button>
+              Project 1
+            </div>
+            <MoreHorizontal />
           </div>
         </Button>
-        Project
-      </div>
-      <ListChevronsUpDown />
-    </SidebarMenuButton>
+
+        <Separator />
+        <CreateProjectDialog>
+          <Button variant={"ghost"} size={"lg"}>
+            <div className="flex flex-1 items-center gap-2">
+              <Button variant={"outline"} size={"icon-sm"} asChild>
+                <div>
+                  <Plus />
+                </div>
+              </Button>
+              Create New Project
+            </div>
+          </Button>
+        </CreateProjectDialog>
+      </PopoverContent>
+    </Popover>
   );
 }

@@ -1,5 +1,4 @@
 import { ClientGuide } from "@/components/custom/client-guide";
-import { AnimatedBeam } from "@/components/ui/animated-beam";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function ClientHome() {
@@ -18,7 +17,9 @@ export default function ClientHome() {
           <CardHeader>
             <CardTitle className="font-bold">Recent</CardTitle>
           </CardHeader>
-          <CardContent></CardContent>
+          <CardContent>
+            <Card></Card>
+          </CardContent>
         </Card>
       </div>
     </div>

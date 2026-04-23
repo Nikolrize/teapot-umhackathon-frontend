@@ -11,6 +11,8 @@ import {
   MessageCircleMore,
 } from "lucide-react";
 import { Label } from "../ui/label";
+import { Button } from "../ui/button";
+import CreateProjectDialog from "./create-project-dialog";
 
 const Circle = forwardRef<
   HTMLDivElement,
@@ -54,6 +56,9 @@ export function ClientGuide() {
               Set up a workspace to organise your data, goals, and decisions in
               one place.
             </span>
+            <CreateProjectDialog>
+              <Button variant={"secondary"}>Create New Project</Button>
+            </CreateProjectDialog>
           </div>
           <div className="flex flex-col items-center gap-4">
             <Circle ref={div2Ref}>
@@ -64,6 +69,7 @@ export function ClientGuide() {
               Explore a range of AI agents designed to analyze, predict, and
               optimize different aspects of your business.
             </span>
+            <Button variant={"secondary"}>View Agents</Button>
           </div>
           <div className="flex flex-col items-center gap-4">
             <Circle ref={div3Ref}>
@@ -74,6 +80,7 @@ export function ClientGuide() {
               Tailor your dashboard to display the insights, metrics, and agents
               that matter most to you.
             </span>
+            <Button variant={"secondary"}>View Dashboard</Button>
           </div>
           <div className="flex flex-col items-center gap-4">
             <Circle ref={div4Ref}>
@@ -84,6 +91,7 @@ export function ClientGuide() {
               Export or share your analysis and results with your team to
               support better, data-driven decisions.
             </span>
+            <Button variant={"secondary"}>View Chat</Button>
           </div>
         </div>
       </div>
