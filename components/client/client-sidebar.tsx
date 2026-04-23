@@ -43,6 +43,7 @@ import {
 import { Separator } from "../ui/separator";
 import DeleteProjectDialog from "./delete-project-dialog";
 import Link from "next/link";
+import { agents } from "@/lib/data";
 
 export default function ClientSidebar() {
   return (
@@ -86,41 +87,15 @@ export default function ClientSidebar() {
                 </SidebarMenuButton>
               </Link>
               <SidebarMenuSub>
-                <SidebarMenuSubItem>
-                  <SidebarMenuSubButton href="/client-agents/sales-predictor">
-                    Sales Predictor
-                  </SidebarMenuSubButton>
-                </SidebarMenuSubItem>
-                <SidebarMenuSubItem>
-                  <SidebarMenuSubButton href="/client-agents/pain-point-analyser">
-                    Pain Point Analyser
-                  </SidebarMenuSubButton>
-                </SidebarMenuSubItem>
-                <SidebarMenuSubItem>
-                  <SidebarMenuSubButton href="/client-agents/profit-optimiser">
-                    Profit Optimiser
-                  </SidebarMenuSubButton>
-                </SidebarMenuSubItem>
-                <SidebarMenuSubItem>
-                  <SidebarMenuSubButton href="/client-agents/decision-recommendation">
-                    Decision Recommendation
-                  </SidebarMenuSubButton>
-                </SidebarMenuSubItem>
-                <SidebarMenuSubItem>
-                  <SidebarMenuSubButton href="/client-agents/risk-identifier">
-                    Risk Identifier
-                  </SidebarMenuSubButton>
-                </SidebarMenuSubItem>
-                <SidebarMenuSubItem>
-                  <SidebarMenuSubButton href="/client-agents/scenario-simulator">
-                    Scenario Simulator
-                  </SidebarMenuSubButton>
-                </SidebarMenuSubItem>
-                <SidebarMenuSubItem>
-                  <SidebarMenuSubButton href="/client-agents/resource-optimiser">
-                    Resource Optimiser
-                  </SidebarMenuSubButton>
-                </SidebarMenuSubItem>
+                {agents.map((item, i) => (
+                  <SidebarMenuSubItem key={i}>
+                    <SidebarMenuSubButton
+                      href={`/client-agents/${item.slug}/1`}
+                    >
+                      {item.name}
+                    </SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
+                ))}
               </SidebarMenuSub>
             </SidebarMenuItem>
           </SidebarMenu>

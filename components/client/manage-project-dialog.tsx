@@ -142,6 +142,7 @@ export default function ManageProjectDialog({
               {...register("projectDescription")}
               placeholder="(optional)"
               maxLength={200}
+              className="resize-none"
             />
 
             {/* Business Name */}
@@ -250,7 +251,7 @@ export function BusinessContextDialog({
               <Textarea
                 placeholder="Click to set business context"
                 maxLength={200}
-                className="max-h-20"
+                className="max-h-20 resize-none"
                 value={field.value}
               />
             </DialogTrigger>
@@ -273,7 +274,7 @@ export function BusinessContextDialog({
               maxLength={3000}
               defaultValue={field.value}
               onChange={(e) => setValue(e.target.value)}
-              className="max-h-[70vh]"
+              className="max-h-[70vh] resize-none"
             />
             <div className="flex gap-2 justify-center">
               <DialogClose asChild>
