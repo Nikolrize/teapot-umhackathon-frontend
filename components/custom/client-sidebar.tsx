@@ -87,49 +87,39 @@ export default function ClientSidebar() {
               </Link>
               <SidebarMenuSub>
                 <SidebarMenuSubItem>
-                  <Link href="/client-agents/sales-predictor">
-                    <SidebarMenuSubButton>Sales Predictor</SidebarMenuSubButton>
-                  </Link>
+                  <SidebarMenuSubButton href="/client-agents/sales-predictor">
+                    Sales Predictor
+                  </SidebarMenuSubButton>
                 </SidebarMenuSubItem>
                 <SidebarMenuSubItem>
-                  <Link href="/client-agents/pain-point-analyser">
-                    <SidebarMenuSubButton>
-                      Pain Point Analyser
-                    </SidebarMenuSubButton>
-                  </Link>
+                  <SidebarMenuSubButton href="/client-agents/pain-point-analyser">
+                    Pain Point Analyser
+                  </SidebarMenuSubButton>
                 </SidebarMenuSubItem>
                 <SidebarMenuSubItem>
-                  <Link href="/client-agents/profit-optimiser">
-                    <SidebarMenuSubButton>
-                      Profit Optimiser
-                    </SidebarMenuSubButton>
-                  </Link>
+                  <SidebarMenuSubButton href="/client-agents/profit-optimiser">
+                    Profit Optimiser
+                  </SidebarMenuSubButton>
                 </SidebarMenuSubItem>
                 <SidebarMenuSubItem>
-                  <Link href="/client-agents/decision-recommendation">
-                    <SidebarMenuSubButton>
-                      Decision Recommendation
-                    </SidebarMenuSubButton>
-                  </Link>
+                  <SidebarMenuSubButton href="/client-agents/decision-recommendation">
+                    Decision Recommendation
+                  </SidebarMenuSubButton>
                 </SidebarMenuSubItem>
                 <SidebarMenuSubItem>
-                  <Link href="/client-agents/risk-identifier">
-                    <SidebarMenuSubButton>Risk Identifier</SidebarMenuSubButton>
-                  </Link>
+                  <SidebarMenuSubButton href="/client-agents/risk-identifier">
+                    Risk Identifier
+                  </SidebarMenuSubButton>
                 </SidebarMenuSubItem>
                 <SidebarMenuSubItem>
-                  <Link href="/client-agents/scenario-simulator">
-                    <SidebarMenuSubButton>
-                      Scenario Simulator
-                    </SidebarMenuSubButton>
-                  </Link>
+                  <SidebarMenuSubButton href="/client-agents/scenario-simulator">
+                    Scenario Simulator
+                  </SidebarMenuSubButton>
                 </SidebarMenuSubItem>
                 <SidebarMenuSubItem>
-                  <Link href="/client-agents/resource-optimiser">
-                    <SidebarMenuSubButton>
-                      Resource Optimiser
-                    </SidebarMenuSubButton>
-                  </Link>
+                  <SidebarMenuSubButton href="/client-agents/resource-optimiser">
+                    Resource Optimiser
+                  </SidebarMenuSubButton>
                 </SidebarMenuSubItem>
               </SidebarMenuSub>
             </SidebarMenuItem>
