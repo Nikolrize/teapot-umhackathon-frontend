@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Send, Upload, X } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
@@ -35,6 +35,11 @@ export default function AgentSession() {
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [input, setInput] = useState("");
   const [files, setFiles] = useState<File[]>([]);
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, isProcessing]);
 
   const { openFileDialog, FileInput, getFileLabel } = useFileUpload({
     onFilesSelected: (files) => {
@@ -90,32 +95,30 @@ export default function AgentSession() {
                 msg.role === "client" ? "justify-end" : "justify-start"
               }`}
             >
-              {msg.content && (
+              {(msg.content || msg.files) && (
                 <div
                   className={`px-4 py-2 rounded-2xl text-sm ${
                     msg.role === "client" &&
-                    "bg-brand-primary text-black rounded max-w-[60%]"
+                    "bg-muted-foreground text-black rounded max-w-[60%] flex flex-col gap-2"
                   }`}
                 >
                   {msg.content}
-                </div>
-              )}
+                  {msg.files &&
+                    msg.files.map((file, i) => (
+                      <Card
+                        key={i}
+                        className="py-1 text-xs cursor-pointer"
+                        onClick={() => handlePreview(file)}
+                      >
+                        <CardContent className="flex items-center gap-2">
+                          <span className="truncate">{file.name}</span>
 
-              {msg.files && (
-                <div className="flex flex-col gap-2">
-                  {msg.files.map((file, i) => (
-                    <Card
-                      key={i}
-                      className="py-1 text-xs cursor-pointer"
-                      onClick={() => handlePreview(file)}
-                    >
-                      <CardContent className="flex items-center gap-2">
-                        <span className="max-w-50 truncate">{file.name}</span>
-
-                        <Badge variant="secondary">{getFileLabel(file)}</Badge>
-                      </CardContent>
-                    </Card>
-                  ))}
+                          <Badge variant="secondary">
+                            {getFileLabel(file)}
+                          </Badge>
+                        </CardContent>
+                      </Card>
+                    ))}
                 </div>
               )}
             </div>
@@ -126,6 +129,8 @@ export default function AgentSession() {
               Processing your request...
             </AnimatedShinyText>
           )}
+
+          <div ref={messagesEndRef} />
         </div>
 
         {/* Input */}
@@ -136,11 +141,11 @@ export default function AgentSession() {
                 {files.map((file, idx) => (
                   <Card
                     key={idx}
-                    className="py-1 text-xs cursor-pointer"
+                    className="max-w-50 py-1 text-xs cursor-pointer"
                     onClick={() => handlePreview(file)}
                   >
                     <CardContent className="flex items-center gap-2">
-                      <span className="max-w-30 truncate">{file.name}</span>
+                      <span className="truncate">{file.name}</span>
                       <Badge variant={"secondary"}>{getFileLabel(file)}</Badge>
                       <Button
                         size={"icon-xs"}
