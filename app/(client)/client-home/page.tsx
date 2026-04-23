@@ -1,4 +1,4 @@
-import { ClientGuide } from "@/components/custom/client-guide";
+import { ClientGuide } from "@/components/client/client-guide";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function ClientHome() {

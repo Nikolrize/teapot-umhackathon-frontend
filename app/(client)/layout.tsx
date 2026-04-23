@@ -1,5 +1,5 @@
-import ClientHeader from "@/components/custom/client-header";
-import ClientSidebar from "@/components/custom/client-sidebar";
+import ClientHeader from "@/components/client/client-header";
+import ClientSidebar from "@/components/client/client-sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
 import { ToastProvider } from "@base-ui/react";
