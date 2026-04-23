@@ -4,13 +4,17 @@ import {
   BadgeMinus,
   ChartNoAxesCombined,
   Coins,
+  CreditCard,
   HomeIcon,
   LayoutDashboard,
+  MessageCircleMore,
   Notebook,
   Pencil,
   Scale,
   ScanSearch,
   Search,
+  Settings,
+  UserCircle,
 } from "lucide-react";
 import { Button } from "../ui/button";
 import {
@@ -71,8 +75,31 @@ export function SearchCommandDialog() {
                 <LayoutDashboard />
                 <span>Dashboard</span>
               </CommandItem>
+              <CommandItem>
+                <MessageCircleMore />
+                <span>Chat</span>
+              </CommandItem>
             </CommandGroup>
+
             <CommandSeparator />
+
+            <CommandGroup heading="Profile">
+              <CommandItem>
+                <UserCircle />
+                <span>Account</span>
+              </CommandItem>
+              <CommandItem>
+                <Settings />
+                <span>Settings</span>
+              </CommandItem>
+              <CommandItem>
+                <CreditCard />
+                <span>Subscriptions</span>
+              </CommandItem>
+            </CommandGroup>
+
+            <Separator />
+
             <CommandGroup heading="Agents">
               <CommandItem>
                 <ChartNoAxesCombined />

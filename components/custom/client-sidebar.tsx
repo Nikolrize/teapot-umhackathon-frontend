@@ -1,16 +1,20 @@
 "use client";
 
 import {
+  CircleUser,
+  CreditCard,
   EllipsisVertical,
   Folder,
   HatGlasses,
   Home,
   LayoutDashboard,
   ListChevronsUpDown,
+  LogOut,
   MessageCircleMore,
   MoreHorizontal,
   Pencil,
   Plus,
+  Settings,
   Trash,
 } from "lucide-react";
 import {
@@ -38,6 +42,7 @@ import {
 } from "../ui/popover";
 import { Separator } from "../ui/separator";
 import DeleteProjectDialog from "./delete-project-dialog";
+import Link from "next/link";
 
 export default function ClientSidebar() {
   return (
@@ -45,90 +50,143 @@ export default function ClientSidebar() {
       <SidebarHeader>
         <ProjectSelectorPopover />
       </SidebarHeader>
+
       <SidebarContent className="cursor-pointer">
         <SidebarGroup>
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton>
-                <Home />
-                Home
-              </SidebarMenuButton>
+              <Link href="/client-home">
+                <SidebarMenuButton>
+                  <Home />
+                  Home
+                </SidebarMenuButton>
+              </Link>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton>
-                <LayoutDashboard />
-                Dashboard
-              </SidebarMenuButton>
+              <Link href="/client-dashboard">
+                <SidebarMenuButton>
+                  <LayoutDashboard />
+                  Dashboard
+                </SidebarMenuButton>
+              </Link>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton>
-                <MessageCircleMore />
-                Chat
-              </SidebarMenuButton>
+              <Link href="/client-chat">
+                <SidebarMenuButton>
+                  <MessageCircleMore />
+                  Chat
+                </SidebarMenuButton>
+              </Link>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton>
-                <HatGlasses />
-                Agents
-              </SidebarMenuButton>
+              <Link href="/client-agents">
+                <SidebarMenuButton>
+                  <HatGlasses />
+                  Agents
+                </SidebarMenuButton>
+              </Link>
               <SidebarMenuSub>
                 <SidebarMenuSubItem>
-                  <SidebarMenuSubButton>Sales Predictor</SidebarMenuSubButton>
+                  <Link href="/client-agents/sales-predictor">
+                    <SidebarMenuSubButton>Sales Predictor</SidebarMenuSubButton>
+                  </Link>
                 </SidebarMenuSubItem>
                 <SidebarMenuSubItem>
-                  <SidebarMenuSubButton>
-                    Pain Point Analyser
-                  </SidebarMenuSubButton>
+                  <Link href="/client-agents/pain-point-analyser">
+                    <SidebarMenuSubButton>
+                      Pain Point Analyser
+                    </SidebarMenuSubButton>
+                  </Link>
                 </SidebarMenuSubItem>
                 <SidebarMenuSubItem>
-                  <SidebarMenuSubButton>Profit Optimiser</SidebarMenuSubButton>
+                  <Link href="/client-agents/profit-optimiser">
+                    <SidebarMenuSubButton>
+                      Profit Optimiser
+                    </SidebarMenuSubButton>
+                  </Link>
                 </SidebarMenuSubItem>
                 <SidebarMenuSubItem>
-                  <SidebarMenuSubButton>
-                    Decision Recommendation
-                  </SidebarMenuSubButton>
+                  <Link href="/client-agents/decision-recommendation">
+                    <SidebarMenuSubButton>
+                      Decision Recommendation
+                    </SidebarMenuSubButton>
+                  </Link>
                 </SidebarMenuSubItem>
                 <SidebarMenuSubItem>
-                  <SidebarMenuSubButton>Risk Identifier</SidebarMenuSubButton>
+                  <Link href="/client-agents/risk-identifier">
+                    <SidebarMenuSubButton>Risk Identifier</SidebarMenuSubButton>
+                  </Link>
                 </SidebarMenuSubItem>
                 <SidebarMenuSubItem>
-                  <SidebarMenuSubButton>
-                    Scenario Simulator
-                  </SidebarMenuSubButton>
+                  <Link href="/client-agents/scenario-simulator">
+                    <SidebarMenuSubButton>
+                      Scenario Simulator
+                    </SidebarMenuSubButton>
+                  </Link>
                 </SidebarMenuSubItem>
                 <SidebarMenuSubItem>
-                  <SidebarMenuSubButton>
-                    Resource Optimiser
-                  </SidebarMenuSubButton>
+                  <Link href="/client-agents/resource-optimiser">
+                    <SidebarMenuSubButton>
+                      Resource Optimiser
+                    </SidebarMenuSubButton>
+                  </Link>
                 </SidebarMenuSubItem>
               </SidebarMenuSub>
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
+
       <SidebarFooter>
-        <ClientProfile />
+        <ClientProfilePopover />
       </SidebarFooter>
     </Sidebar>
   );
 }
 
-export function ClientProfile() {
+export function ClientProfilePopover() {
   return (
-    <SidebarMenuButton
-      size={"lg"}
-      className="bg-muted hover:ring-1 hover:ring-muted-foreground"
-    >
-      <div className="flex flex-1 items-center gap-2">
-        <Avatar>
-          <AvatarImage src="/icons/user.png" alt="user-png" />
-          <AvatarFallback>CN</AvatarFallback>
-          <AvatarBadge className="bg-green-600" />
-        </Avatar>
-        User
-      </div>
-      <EllipsisVertical />
-    </SidebarMenuButton>
+    <Popover>
+      <PopoverTrigger asChild>
+        <SidebarMenuButton
+          size={"lg"}
+          className="bg-muted hover:ring-1 hover:ring-muted-foreground"
+        >
+          <div className="flex flex-1 items-center gap-2">
+            <Avatar>
+              <AvatarImage src="/icons/user.png" alt="user-png" />
+              <AvatarFallback>CN</AvatarFallback>
+              <AvatarBadge className="bg-green-600" />
+            </Avatar>
+            User
+          </div>
+          <EllipsisVertical />
+        </SidebarMenuButton>
+      </PopoverTrigger>
+
+      <PopoverContent side="right" className="w-[30vh]">
+        <PopoverHeader>
+          <PopoverTitle className="text-muted-foreground text-xs">
+            Profile
+          </PopoverTitle>
+        </PopoverHeader>
+
+        <Button variant={"ghost"} className="flex gap-2 justify-start">
+          <CircleUser className="text-muted-foreground" /> Account
+        </Button>
+        <Button variant={"ghost"} className="flex gap-2 justify-start">
+          <Settings className="text-muted-foreground" /> Settings
+        </Button>
+        <Button variant={"ghost"} className="flex gap-2 justify-start">
+          <CreditCard className="text-muted-foreground" /> Subscriptions
+        </Button>
+
+        <Separator />
+        <Button variant={"ghost"} className="flex gap-2 justify-start">
+          <LogOut className="text-muted-foreground" /> Log out
+        </Button>
+      </PopoverContent>
+    </Popover>
   );
 }
 
