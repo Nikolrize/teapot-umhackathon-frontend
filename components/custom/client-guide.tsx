@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { Label } from "../ui/label";
 import { Button } from "../ui/button";
-import CreateProjectDialog from "./create-project-dialog";
+import ManageProjectDialog from "./manage-project-dialog";
 
 const Circle = forwardRef<
   HTMLDivElement,
@@ -56,9 +56,9 @@ export function ClientGuide() {
               Set up a workspace to organise your data, goals, and decisions in
               one place.
             </span>
-            <CreateProjectDialog>
+            <ManageProjectDialog>
               <Button variant={"secondary"}>Create New Project</Button>
-            </CreateProjectDialog>
+            </ManageProjectDialog>
           </div>
           <div className="flex flex-col items-center gap-4">
             <Circle ref={div2Ref}>

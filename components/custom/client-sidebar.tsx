@@ -9,7 +9,9 @@ import {
   ListChevronsUpDown,
   MessageCircleMore,
   MoreHorizontal,
+  Pencil,
   Plus,
+  Trash,
 } from "lucide-react";
 import {
   Sidebar,
@@ -26,7 +28,7 @@ import {
 } from "../ui/sidebar";
 import { Avatar, AvatarBadge, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
-import CreateProjectDialog from "./create-project-dialog";
+import ManageProjectDialog from "./manage-project-dialog";
 import {
   Popover,
   PopoverContent,
@@ -35,12 +37,13 @@ import {
   PopoverTrigger,
 } from "../ui/popover";
 import { Separator } from "../ui/separator";
+import DeleteProjectDialog from "./delete-project-dialog";
 
 export default function ClientSidebar() {
   return (
     <Sidebar className="w-fit">
       <SidebarHeader>
-        <ProjectSelector />
+        <ProjectSelectorPopover />
       </SidebarHeader>
       <SidebarContent className="cursor-pointer">
         <SidebarGroup>
@@ -129,7 +132,7 @@ export function ClientProfile() {
   );
 }
 
-export function ProjectSelector() {
+export function ProjectSelectorPopover() {
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -153,6 +156,30 @@ export function ProjectSelector() {
           </PopoverTitle>
         </PopoverHeader>
 
+        <ManageProjectPopover />
+
+        <Separator />
+        <ManageProjectDialog>
+          <Button variant={"ghost"} size={"lg"}>
+            <div className="flex flex-1 items-center gap-2">
+              <Button variant={"outline"} size={"icon-sm"} asChild>
+                <div>
+                  <Plus />
+                </div>
+              </Button>
+              Create New Project
+            </div>
+          </Button>
+        </ManageProjectDialog>
+      </PopoverContent>
+    </Popover>
+  );
+}
+
+export function ManageProjectPopover() {
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
         <Button variant={"secondary"} size={"lg"}>
           <div className="flex flex-1 items-center justify-between gap-2">
             <div className="flex gap-2 items-center">
@@ -166,20 +193,51 @@ export function ProjectSelector() {
             <MoreHorizontal />
           </div>
         </Button>
+      </PopoverTrigger>
 
-        <Separator />
-        <CreateProjectDialog>
-          <Button variant={"ghost"} size={"lg"}>
-            <div className="flex flex-1 items-center gap-2">
-              <Button variant={"outline"} size={"icon-sm"} asChild>
-                <div>
-                  <Plus />
-                </div>
-              </Button>
-              Create New Project
-            </div>
+      <PopoverContent side="right" className="w-[10vw]">
+        <PopoverHeader>
+          <PopoverTitle className="text-muted-foreground text-xs">
+            Manage Project
+          </PopoverTitle>
+        </PopoverHeader>
+
+        <ManageProjectDialog
+          mode="edit"
+          // Dummy Data
+          projectData={{
+            projectName: "Project 1",
+            projectDescription: "Project Desc 1",
+            businessName: "Business Name",
+            businessType: "Commerce",
+            businessContext: "Business Context",
+            goal: "Goal 1",
+            budgetMin: 20000,
+            budgetMax: 30000,
+          }}
+        >
+          <Button variant={"secondary"} className="justify-start gap-4">
+            <Pencil /> Edit
           </Button>
-        </CreateProjectDialog>
+        </ManageProjectDialog>
+
+        <DeleteProjectDialog
+          // Dummy Data
+          projectData={{
+            projectName: "Project 1",
+            projectDescription: "Project Desc 1",
+            businessName: "Business Name",
+            businessType: "Commerce",
+            businessContext: "Business Context",
+            goal: "Goal 1",
+            budgetMin: 20000,
+            budgetMax: 30000,
+          }}
+        >
+          <Button variant={"destructive"} className="justify-start gap-4">
+            <Trash /> Delete
+          </Button>
+        </DeleteProjectDialog>
       </PopoverContent>
     </Popover>
   );

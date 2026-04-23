@@ -29,23 +29,21 @@ import {
   UseFormGetValues,
 } from "react-hook-form";
 import { toast } from "sonner";
+import { ProjectFormValues } from "@/app/interfaces/client-interface";
 
-type FormValues = {
-  projectName: string;
-  projectDescription: string;
-  businessName: string;
-  businessType: string;
-  businessContext: string;
-  goal: string;
-  budgetMin: number;
-  budgetMax: number;
+type Mode = "create" | "edit";
+
+type ProjectDialogProps = {
+  children: ReactNode;
+  mode?: Mode;
+  projectData?: ProjectFormValues;
 };
 
-export default function CreateProjectDialog({
+export default function ManageProjectDialog({
   children,
-}: {
-  children: ReactNode;
-}) {
+  mode = "create",
+  projectData,
+}: ProjectDialogProps) {
   const [open, setOpen] = useState<boolean>(false);
 
   const {
@@ -55,42 +53,78 @@ export default function CreateProjectDialog({
     reset,
     getValues,
     formState: { errors },
-  } = useForm<FormValues>({
-    defaultValues: {
-      projectName: "",
-      projectDescription: "",
-      businessName: "",
-      businessType: "",
-      businessContext: "",
-      goal: "",
-      budgetMin: 1000,
-      budgetMax: 25000,
-    },
+  } = useForm<ProjectFormValues>({
+    defaultValues:
+      mode === "edit" && projectData
+        ? projectData
+        : {
+            projectName: "",
+            projectDescription: "",
+            businessName: "",
+            businessType: "",
+            businessContext: "",
+            goal: "",
+            budgetMin: 1000,
+            budgetMax: 25000,
+          },
   });
 
-  const onSubmit = (data: FormValues) => {
+  const handleOpenChange = (val: boolean) => {
+    setOpen(val);
+
+    if (val && mode === "edit" && projectData) {
+      reset(projectData);
+    }
+
+    if (val && mode === "create") {
+      reset({
+        projectName: "",
+        projectDescription: "",
+        businessName: "",
+        businessType: "",
+        businessContext: "",
+        goal: "",
+        budgetMin: 1000,
+        budgetMax: 25000,
+      });
+    }
+  };
+
+  const onSubmit = (data: ProjectFormValues) => {
     try {
+      // Create API / Update API
       console.log("FORM DATA:", data);
       reset();
       setOpen(false);
-      toast("New Project Created");
+
+      if (mode === "edit") {
+        toast.success("Project Updated");
+      } else {
+        toast.success("New Project Created");
+      }
     } catch (err) {
       console.error(err);
+      if (mode === "edit") {
+        toast.error("Update failed");
+      } else {
+        toast.error("Unable to create new project");
+      }
     }
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="min-w-3xl">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <DialogHeader>
             <DialogTitle className="text-brand-primary">
-              Create New Project
+              {mode === "edit" ? "Edit Project" : "Create New Project"}
             </DialogTitle>
             <DialogDescription>
-              Set up a new workspace for your data, goals, and decisions in one
-              place.
+              {mode === "edit"
+                ? "Edit your workspace details here."
+                : "Set up a new workspace for your data, goals, and decisions in one place."}
             </DialogDescription>
           </DialogHeader>
           <div className="flex flex-col gap-4 max-h-[70vh] p-2 overflow-y-scroll">
@@ -175,7 +209,7 @@ export default function CreateProjectDialog({
 export function BusinessTypeSelect({
   control,
 }: {
-  control: Control<FormValues>;
+  control: Control<ProjectFormValues>;
 }) {
   return (
     <Controller
@@ -216,7 +250,7 @@ export function BusinessTypeSelect({
 export function BusinessContextDialog({
   control,
 }: {
-  control: Control<FormValues>;
+  control: Control<ProjectFormValues>;
 }) {
   const [value, setValue] = useState("");
   return (
@@ -280,8 +314,8 @@ function BudgetRangeSlider({
   control,
   getValues,
 }: {
-  control: Control<FormValues>;
-  getValues: UseFormGetValues<FormValues>;
+  control: Control<ProjectFormValues>;
+  getValues: UseFormGetValues<ProjectFormValues>;
 }) {
   return (
     <div className="flex gap-2 w-full">
