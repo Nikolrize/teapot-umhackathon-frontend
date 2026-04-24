@@ -140,3 +140,18 @@ export const allowedFileTypes = [
   { type: "text/html", label: "HTML" },
   { type: "text/css", label: "CSS" },
 ];
+
+export const MODEL_OPTIONS = [
+  // OpenAI
+  { label: "GPT-4o", value: "gpt-4o", provider: "openai" },
+  { label: "GPT-4o Mini", value: "gpt-4o-mini", provider: "openai" },
+  { label: "GPT-3.5 Turbo", value: "gpt-3.5-turbo", provider: "openai" },
+
+  // Gemini
+  { label: "Gemini 1.5 Pro", value: "gemini-1.5-pro", provider: "gemini" },
+  { label: "Gemini 1.5 Flash", value: "gemini-1.5-flash", provider: "gemini" },
+
+  // ILMU
+  { label: "ILMU Core", value: "ilmu-core", provider: "ilmu" },
+  { label: "ILMU Lite", value: "ilmu-lite", provider: "ilmu" },
+];

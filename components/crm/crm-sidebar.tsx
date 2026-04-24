@@ -71,17 +71,17 @@ export default function CRMSidebar() {
               </Link>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <Link href="/crm-llm">
+              <Link href="/crm-model">
                 <SidebarMenuButton>
-                  <Settings />
-                  LLM Settings
+                  <Bot />
+                  Model Settings
                 </SidebarMenuButton>
               </Link>
             </SidebarMenuItem>
             <SidebarMenuItem>
               <Link href="/crm-agents">
                 <SidebarMenuButton>
-                  <Bot />
+                  <Settings />
                   Agent Settings
                 </SidebarMenuButton>
               </Link>
