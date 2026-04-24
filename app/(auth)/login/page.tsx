@@ -14,19 +14,20 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import {
-  BadgeMinus,
-  ChartNoAxesCombined,
-  Coins,
-  Notebook,
-  Pencil,
-  Scale,
-  ScanSearch,
+  ClipboardCheck,
+  HatGlasses,
+  LayoutDashboard,
+  MessageCircleMore,
 } from "lucide-react";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
 export default function Login() {
+  const handleGoogleLogin = () => {
+    window.location.href = `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/google/login`;
+  };
+
   return (
     <main className="relative w-full h-screen flex items-center justify-center overflow-hidden">
       {/* Background */}
@@ -96,6 +97,7 @@ export default function Login() {
                     className="w-full gap-2"
                     size={"lg"}
                     variant={"secondary"}
+                    onClick={() => handleGoogleLogin()}
                   >
                     <Image
                       src={"/icons/google.png"}
@@ -128,50 +130,29 @@ export default function Login() {
           >
             <CardSwapCard>
               <h3 className="flex gap-2 p-2 border-b-1 border-white">
-                <ChartNoAxesCombined />
-                Sales Predictor
+                <HatGlasses />
+                Personalised Agents
               </h3>
               <p>Picture</p>
             </CardSwapCard>
             <CardSwapCard>
               <h3 className="flex gap-2 p-2 border-b-1 border-white">
-                <ScanSearch />
-                Pain Point Analyser
+                <ClipboardCheck />
+                Business Consultation Session
               </h3>
               <p>Picture</p>
             </CardSwapCard>
             <CardSwapCard>
               <h3 className="flex gap-2 p-2 border-b-1 border-white">
-                <Coins />
-                Profit Optimiser
+                <LayoutDashboard />
+                Customisable Dashboard
               </h3>
               <p>Picture</p>
             </CardSwapCard>
             <CardSwapCard>
               <h3 className="flex gap-2 p-2 border-b-1 border-white">
-                <Scale />
-                Decision Recommendation
-              </h3>
-              <p>Picture</p>
-            </CardSwapCard>
-            <CardSwapCard>
-              <h3 className="flex gap-2 p-2 border-b-1 border-white">
-                <BadgeMinus />
-                Risk Identifier
-              </h3>
-              <p>Picture</p>
-            </CardSwapCard>
-            <CardSwapCard>
-              <h3 className="flex gap-2 p-2 border-b-1 border-white">
-                <Pencil />
-                Scenario Simulator
-              </h3>
-              <p>Picture</p>
-            </CardSwapCard>
-            <CardSwapCard>
-              <h3 className="flex gap-2 p-2 border-b-1 border-white">
-                <Notebook />
-                Resource Planner
+                <MessageCircleMore />
+                Chat System
               </h3>
               <p>Picture</p>
             </CardSwapCard>
