@@ -3,6 +3,8 @@ import ClientSidebar from "@/components/client/client-sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { DashboardProvider } from "@/contexts/dashboard-provider";
+import { ReferenceProvider } from "@/contexts/reference-provider";
 
 export default function ClientLayout({
   children,
@@ -14,7 +16,11 @@ export default function ClientLayout({
       <ClientSidebar />
       <div className="h-screen w-full flex flex-col">
         <ClientHeader />
-        <TooltipProvider>{children}</TooltipProvider>
+        <TooltipProvider>
+          <DashboardProvider>
+            <ReferenceProvider>{children}</ReferenceProvider>
+          </DashboardProvider>
+        </TooltipProvider>
         <Toaster />
       </div>
     </SidebarProvider>

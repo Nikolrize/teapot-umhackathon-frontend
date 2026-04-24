@@ -23,3 +23,15 @@ export type Message = {
   files?: File[];
   references?: string[];
 };
+
+export type DashboardWidget = {
+  id: string;
+  type: "agent_message" | "file" | "chart";
+  data: any;
+};
+
+export type Reference = {
+  id: string;
+  content: string;
+  role: "agent" | "client";
+};

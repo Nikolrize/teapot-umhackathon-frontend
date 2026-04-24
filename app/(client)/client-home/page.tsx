@@ -7,7 +7,7 @@ export default function ClientHome() {
       <div className="flex flex-col w-[70vw] gap-4">
         <Card>
           <CardHeader>
-            <CardTitle className="font-bold">Guide</CardTitle>
+            <CardTitle className="text-brand-primary font-bold">Guide</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col items-center">
             <ClientGuide />
@@ -15,7 +15,7 @@ export default function ClientHome() {
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle className="font-bold">Recent</CardTitle>
+            <CardTitle className="text-brand-primary  font-bold">Recent</CardTitle>
           </CardHeader>
           <CardContent>
             <Card></Card>

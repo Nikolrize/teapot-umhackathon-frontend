@@ -28,6 +28,8 @@ import { toast } from "sonner";
 import { Message } from "@/interfaces/client-interface";
 import EditReferenceDialog from "@/components/client/edit-reference-dialog";
 import DeleteReferenceDialog from "@/components/client/delete-reference-dialog";
+import { useReference } from "@/contexts/reference-provider";
+import { useDashboard } from "@/contexts/dashboard-provider";
 
 const dummyMessage: Message[] = [
   {
@@ -52,10 +54,11 @@ export default function AgentSession() {
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [input, setInput] = useState("");
   const [files, setFiles] = useState<File[]>([]);
-  const [referenceMessages, setReferenceMessages] = useState<Message[]>([]);
-  const [dashboardMessages, setDashboardMessages] = useState<Message[]>([]);
   const [refOpen, setRefOpen] = useState<boolean>(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+  const { references, addReference } = useReference();
+  const { addWidget } = useDashboard();
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -105,10 +108,7 @@ export default function AgentSession() {
 
   const handleAddReference = (msg: Message) => {
     try {
-      setReferenceMessages((prev) => {
-        if (prev.some((m) => m.id === msg.id)) return prev;
-        return [...prev, msg];
-      });
+      addReference(msg);
       toast.success("Added to references");
     } catch (err) {
       console.error(err);
@@ -118,9 +118,10 @@ export default function AgentSession() {
 
   const handleAddToDashboard = (msg: Message) => {
     try {
-      setDashboardMessages((prev) => {
-        if (prev.some((m) => m.id === msg.id)) return prev;
-        return [...prev, msg];
+      addWidget({
+        id: crypto.randomUUID(),
+        type: "agent_message",
+        data: msg,
       });
       toast.success("Added to dashboard");
     } catch (err) {
@@ -317,12 +318,12 @@ export default function AgentSession() {
         <div className="flex-1 flex flex-col gap-4 border-l h-full overflow-y-auto p-4 bg-card">
           <Label className="font-semibold text-brand-primary">References</Label>
 
-          {referenceMessages.length === 0 ? (
+          {references.length === 0 ? (
             <span className="text-xs text-muted-foreground mt-2">
               No references yet
             </span>
           ) : (
-            referenceMessages.map((msg) => (
+            references.map((msg: Message) => (
               <Card key={msg.id} className="text-xs">
                 <CardContent className="flex flex-col gap-2">
                   <p className="whitespace-pre-wrap">{msg.content}</p>
