@@ -40,7 +40,7 @@ export default function CRMSidebar() {
   return (
     <Sidebar className="w-fit">
       <SidebarHeader className="p-4">
-        <h1 className="font-bold text-brand-primary">Admin</h1>
+        <h1 className="font-bold text-brand-primary">CRM</h1>
       </SidebarHeader>
 
       <SidebarContent className="cursor-pointer">
