@@ -8,7 +8,10 @@ export const updateUserSchema = z.object({
 
 export const passwordSchema = z
   .object({
-    password: z.string().min(8),
+    password: z
+      .string()
+      .min(6, "Password must have minimum 6 characters")
+      .regex(/[A-Z]/, "Password must contain at least 1 uppercase letter"),
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {

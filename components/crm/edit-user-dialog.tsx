@@ -32,7 +32,7 @@ import {
 
 type Props = {
   children?: ReactNode;
-  user: User | null;
+  user: User;
 };
 
 export type UpdateUserFormValues = z.infer<typeof updateUserSchema>;
@@ -71,7 +71,7 @@ export default function EditUserDialog({ children, user }: Props) {
 
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Edit User</DialogTitle>
+          <DialogTitle className="text-brand-primary">Edit User</DialogTitle>
           <DialogDescription>
             Update user details and click save when done.
           </DialogDescription>
