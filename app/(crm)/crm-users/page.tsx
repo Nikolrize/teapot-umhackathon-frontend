@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/card";
 import { User } from "@/interfaces/crm-interface";
 import { Button } from "@/components/ui/button";
+import AddUserDialog from "@/components/crm/add-user-dialog";
 
 async function getData(): Promise<User[]> {
   // Fetch data from your API here.
@@ -112,7 +113,9 @@ export default async function CRMUsers() {
                 Manage all user-related details and actions here.
               </CardDescription>
             </div>
-            <Button className="bg-brand-primary">Add User</Button>
+            <AddUserDialog>
+              <Button className="bg-brand-primary">Add User</Button>
+            </AddUserDialog>
           </CardHeader>
           <CardContent>
             <DataTable columns={columns} data={data} />

@@ -16,6 +16,8 @@ import { DataTableColumnHeader } from "../ui/data-table-column-header";
 import { User } from "@/interfaces/crm-interface";
 import EditUserDialog from "./edit-user-dialog";
 import UpdatePasswordDialog from "./update-password-dialog";
+import ManageCreditDialog from "./manage-credits-dialog";
+import DeleteUserDialog from "./delete-user-dialog";
 
 export const columns: ColumnDef<User>[] = [
   {
@@ -133,11 +135,26 @@ export const columns: ColumnDef<User>[] = [
               </DropdownMenuItem>
             </UpdatePasswordDialog>
 
-            <DropdownMenuItem>Manage Credits</DropdownMenuItem>
+            <ManageCreditDialog user={user}>
+              <DropdownMenuItem
+                onSelect={(e) => {
+                  e.preventDefault();
+                }}
+              >
+                Manage Credits
+              </DropdownMenuItem>
+            </ManageCreditDialog>
 
-            <DropdownMenuItem variant={"destructive"}>
-              Delete User
-            </DropdownMenuItem>
+            <DeleteUserDialog user={user}>
+              <DropdownMenuItem
+                variant={"destructive"}
+                onSelect={(e) => {
+                  e.preventDefault();
+                }}
+              >
+                Delete User
+              </DropdownMenuItem>
+            </DeleteUserDialog>
           </DropdownMenuContent>
         </DropdownMenu>
       );

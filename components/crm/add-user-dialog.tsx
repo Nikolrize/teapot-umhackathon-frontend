@@ -8,60 +8,58 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../ui/dialog";
+} from "@/components/ui/dialog";
 
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 
-import { Controller, useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ReactNode } from "react";
 import { toast } from "sonner";
+import { ReactNode } from "react";
 
-import { User } from "@/interfaces/crm-interface";
-import { updateUserSchema } from "@/schemas/crm-schemas";
+import { createUserSchema } from "@/schemas/crm-schemas";
 import z from "zod";
+
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../ui/select";
+} from "@/components/ui/select";
 
 type Props = {
   children?: ReactNode;
-  user: User;
 };
 
-export type UpdateUserFormValues = z.infer<typeof updateUserSchema>;
+export type CreateUserFormValues = z.infer<typeof createUserSchema>;
 
-export default function EditUserDialog({ children, user }: Props) {
+export default function AddUserDialog({ children }: Props) {
   const {
-    control,
     register,
+    control,
     handleSubmit,
-    formState: { errors },
     reset,
-  } = useForm<UpdateUserFormValues>({
-    resolver: zodResolver(updateUserSchema),
-    defaultValues: user
-      ? {
-          username: user.username,
-          email: user.email,
-          role: user.role,
-        }
-      : undefined,
+    formState: { errors },
+  } = useForm<CreateUserFormValues>({
+    resolver: zodResolver(createUserSchema),
+    defaultValues: {
+      username: "",
+      email: "",
+      password: "",
+      role: "client",
+    },
   });
 
-  const onSubmit = (data: UpdateUserFormValues) => {
+  const onSubmit = (data: CreateUserFormValues) => {
     try {
-      console.log("UPDATED USER:", data);
-      toast.success("User updated successfully");
+      console.log("CREATE USER:", data);
+      toast.success("User created successfully");
       reset();
     } catch (err) {
-      toast.error("Failed to update user");
+      toast.error("Failed to create user");
     }
   };
 
@@ -71,9 +69,9 @@ export default function EditUserDialog({ children, user }: Props) {
 
       <DialogContent>
         <DialogHeader>
-          <DialogTitle className="text-brand-primary">Edit User</DialogTitle>
+          <DialogTitle className="text-brand-primary">Add New User</DialogTitle>
           <DialogDescription>
-            Update user details and click save when done.
+            Create a new user account. Fill in the details below.
           </DialogDescription>
         </DialogHeader>
 
@@ -100,9 +98,21 @@ export default function EditUserDialog({ children, user }: Props) {
             )}
           </div>
 
-          {/* Role */}
+          {/* Password */}
+          <div className="flex flex-col gap-2">
+            <Label>Password</Label>
+            <Input type="password" {...register("password")} />
+            {errors.password && (
+              <span className="text-destructive text-xs">
+                {errors.password.message}
+              </span>
+            )}
+          </div>
+
+          {/* Role (FIXED with Controller) */}
           <div className="flex flex-col gap-2">
             <Label>Role</Label>
+
             <Controller
               control={control}
               name="role"
@@ -134,10 +144,11 @@ export default function EditUserDialog({ children, user }: Props) {
                 Cancel
               </Button>
             </DialogClose>
-
-            <Button type="submit" className="bg-brand-primary">
-              Save Changes
-            </Button>
+            <DialogClose asChild>
+              <Button type="submit" className="bg-brand-primary">
+                Create User
+              </Button>
+            </DialogClose>
           </div>
         </form>
       </DialogContent>
