@@ -134,10 +134,10 @@ export default function AgentSession() {
     <div
       className={cn(
         refOpen ? "pl-20" : "px-20",
-        "flex justify-center items-center py-4 h-full overflow-hidden gap-4 transition-all duration-300 ease-in-out",
+        "flex justify-center items-center h-full overflow-hidden gap-4 transition-all duration-300 ease-in-out",
       )}
     >
-      <div className="flex flex-col w-[50vw] h-full gap-4">
+      <div className="flex flex-col w-[50vw] h-full gap-4 py-2">
         {/* Messages */}
         <div className="flex-1 overflow-y-auto">
           {messages.map((msg) => (

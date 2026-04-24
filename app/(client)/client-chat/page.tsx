@@ -2,12 +2,14 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Send, Upload, X } from "lucide-react";
+import { Dot, Send, Upload, X } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { useFileUpload } from "@/hooks/useFileUpload";
 import { cn } from "@/lib/utils";
+import { Label } from "@/components/ui/label";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 type Message = {
   id: string;
@@ -78,8 +80,37 @@ export default function ClientChat() {
   };
 
   return (
-    <div className="flex flex-col items-center h-full px-6 py-4 overflow-hidden">
-      <div className="flex flex-col w-[50vw] h-full gap-4">
+    <div
+      className={
+        "pr-20 flex justify-center items-center h-full overflow-hidden gap-4 transition-all duration-300 ease-in-out"
+      }
+    >
+      {/* Chat List */}
+      <div className="flex flex-col gap-4 border-l h-full overflow-y-auto p-4 bg-card w-[20vw]">
+        <Label className="font-semibold text-brand-primary">Chat</Label>
+        <Button
+          variant={"outline"}
+          size={"lg"}
+          className="justify-start py-8 px-4 gap-4"
+        >
+          <Avatar>
+            <AvatarImage src={"/icons/user.png"} alt="user-png" />
+            <AvatarFallback>CN</AvatarFallback>
+          </Avatar>
+          <div className="flex flex-col items-start gap-1 w-full truncate">
+            <span>Username</span>
+            <div className="text-muted-foreground flex items-center text-xs w-full">
+              <span className="truncate">
+                messagessssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
+              </span>
+              <Dot />
+              <span>15m</span>
+            </div>
+          </div>
+        </Button>
+      </div>
+
+      <div className="flex-1 flex flex-col h-full gap-4 py-2">
         {/* Messages */}
         <div className="flex-1 overflow-y-auto">
           {messages.map((msg) => {
@@ -97,7 +128,7 @@ export default function ClientChat() {
                 <div
                   className={cn(
                     isMe
-                      ? "bg-muted-foreground rounded-br-none"
+                      ? "bg-muted-foreground rounded-br-none text-black"
                       : "bg-secondary rounded-bl-none",
                     "px-4 py-2 rounded-2xl text-sm max-w-[60%] flex flex-col gap-2 whitespace-pre-wrap",
                   )}
