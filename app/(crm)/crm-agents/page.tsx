@@ -7,9 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
 import { agents } from "@/lib/data";
-import { Layers } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export default function CRMAgents() {
@@ -21,11 +19,11 @@ export default function CRMAgents() {
         <Card>
           <CardHeader>
             <CardTitle className="font-bold text-brand-primary">
-              Agents
+              Agent Settings
             </CardTitle>
             <CardDescription>
-              Here are all the agents that can assist you. Click to start a
-              session!
+              Here are all the agents that can assist client. Click to access
+              their knowledge base settings.
             </CardDescription>
           </CardHeader>
 
@@ -33,18 +31,13 @@ export default function CRMAgents() {
             {agents.map((item) => (
               <Card
                 key={item.name}
-                onClick={() => router.push(`/client-agents/${item.slug}/1`)}
+                onClick={() => router.push(`/crm-agents/${item.slug}/1`)}
                 className="hover:ring-1 hover:ring-muted-foreground cursor-pointer"
               >
                 <CardHeader>
                   <CardTitle>{item.name}</CardTitle>
                   <CardDescription>{item.description}</CardDescription>
                 </CardHeader>
-                <CardContent>
-                  <Label className="text-xs text-muted-foreground">
-                    <Layers size={14} /> Sessions: 1
-                  </Label>
-                </CardContent>
               </Card>
             ))}
           </CardContent>

@@ -34,21 +34,11 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Label } from "../ui/label";
 import { useParams } from "next/navigation";
 import { agents } from "@/lib/data";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
 
 export default function ClientHeader() {
   const params = useParams();
 
   const agentSlug = params["agentSlug"] as string;
-  const sessionId = params["sessionID"];
 
   const formatAgentName = (slug?: string) => {
     if (!slug) return "";
@@ -69,17 +59,6 @@ export default function ClientHeader() {
       {agentSlug && (
         <div className="flex gap-2">
           <Label className="font-bold">{formatAgentName(agentSlug)}</Label>
-          <Select>
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>Sessions</SelectLabel>
-                <SelectItem value="Session 1">Session 1</SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
         </div>
       )}
 

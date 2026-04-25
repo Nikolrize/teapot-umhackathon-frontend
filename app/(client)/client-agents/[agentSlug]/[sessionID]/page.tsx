@@ -6,6 +6,8 @@ import {
   Blocks,
   Bookmark,
   BookMarked,
+  ChevronRight,
+  Layers,
   Pencil,
   Send,
   Trash,
@@ -25,12 +27,18 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { toast } from "sonner";
-import { Message } from "@/interfaces/client-interface";
+import { Message, Reference } from "@/interfaces/client-interface";
 import EditReferenceDialog from "@/components/client/edit-reference-dialog";
 import DeleteReferenceDialog from "@/components/client/delete-reference-dialog";
 import { useReference } from "@/contexts/reference-provider";
 import { useDashboard } from "@/contexts/dashboard-provider";
-
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import RenameSessionDialog from "@/components/crm/rename-session-dialog";
+import DeleteSessionDialog from "@/components/crm/delete-session-dialog";
 const dummyMessage: Message[] = [
   {
     id: "1",
@@ -47,9 +55,14 @@ const dummyMessage: Message[] = [
     role: "agent",
     content: "Hi! I'm your agent. How can I help you today?",
   },
+  {
+    id: "4",
+    role: "agent",
+    content: "Hi! I'm your agent. How can I help you today?",
+  },
 ];
 
-export default function AgentSession() {
+export default function AgentSession({ resizeMode }: { resizeMode?: boolean }) {
   const [messages, setMessages] = useState<Message[]>(dummyMessage);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [input, setInput] = useState("");
@@ -133,11 +146,12 @@ export default function AgentSession() {
   return (
     <div
       className={cn(
-        refOpen ? "pl-20" : "px-20",
+        refOpen ? "pl-4" : "px-20",
         "flex justify-center items-center h-full overflow-hidden gap-4 transition-all duration-300 ease-in-out",
+        resizeMode && "p-0 h-full",
       )}
     >
-      <div className="flex flex-col w-[50vw] h-full gap-4 py-2">
+      <div className={"flex flex-col max-w-[50vw] h-full w-full gap-4 py-2"}>
         {/* Messages */}
         <div className="flex-1 overflow-y-auto">
           {messages.map((msg) => (
@@ -267,7 +281,54 @@ export default function AgentSession() {
                 Estimated Credit Cost: 0
               </Label>
 
-              <div className="flex gap-2">
+              <div className="flex items-center gap-2">
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button variant="outline">
+                      <Layers /> Session 1
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent side="top" className="max-w-50">
+                    <Label className="text-muted-foreground text-xs">
+                      Sessions
+                    </Label>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant={"secondary"}
+                          className="justify-between"
+                        >
+                          <span className="text-xs truncate">Session 1</span>
+                          <ChevronRight />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent side="right" className="max-w-30">
+                        <Label className="text-muted-foreground text-xs">
+                          Session Settings
+                        </Label>
+                        <RenameSessionDialog defaultName="Session 1">
+                          <Button
+                            variant={"secondary"}
+                            className="justify-start text-xs gap-2"
+                          >
+                            <Pencil />
+                            <span>Rename</span>
+                          </Button>
+                        </RenameSessionDialog>
+                        <DeleteSessionDialog sessionName="Session 1">
+                          <Button
+                            variant={"destructive"}
+                            className="justify-start text-xs gap-2"
+                          >
+                            <Trash />
+                            <span>Delete</span>
+                          </Button>
+                        </DeleteSessionDialog>
+                      </PopoverContent>
+                    </Popover>
+                  </PopoverContent>
+                </Popover>
+
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Button
@@ -314,49 +375,55 @@ export default function AgentSession() {
         </Card>
       </div>
 
-      {refOpen && (
-        <div className="flex-1 flex flex-col gap-4 border-l h-full overflow-y-auto p-4 bg-card">
-          <Label className="font-semibold text-brand-primary">References</Label>
+      {refOpen && <ReferenceSheet references={references} />}
+    </div>
+  );
+}
 
-          {references.length === 0 ? (
-            <span className="text-xs text-muted-foreground mt-2">
-              No references yet
-            </span>
-          ) : (
-            references.map((msg: Message) => (
-              <Card key={msg.id} className="text-xs">
-                <CardContent className="flex flex-col gap-2">
-                  <p className="whitespace-pre-wrap">{msg.content}</p>
-                  <span className="text-muted-foreground">From: Session 1</span>
-                  <div className="flex gap-2">
-                    <Tooltip>
-                      <EditReferenceDialog>
-                        <TooltipTrigger asChild>
-                          <Button variant={"outline"} size={"icon-xs"}>
-                            <Pencil />
-                          </Button>
-                        </TooltipTrigger>
-                      </EditReferenceDialog>
-                      <TooltipContent>Edit reference</TooltipContent>
-                    </Tooltip>
+export function ReferenceSheet({ references }: { references: Reference[] }) {
+  return (
+    <div className="flex-1 flex flex-col gap-4 border-1 h-full p-4 bg-card min-w-[15vw] w-full">
+      <Label className="font-semibold text-brand-primary">References</Label>
 
-                    <Tooltip>
-                      <DeleteReferenceDialog>
-                        <TooltipTrigger asChild>
-                          <Button variant={"destructive"} size={"icon-xs"}>
-                            <Trash />
-                          </Button>
-                        </TooltipTrigger>
-                      </DeleteReferenceDialog>
-                      <TooltipContent>Delete reference</TooltipContent>
-                    </Tooltip>
-                  </div>
-                </CardContent>
-              </Card>
-            ))
-          )}
-        </div>
-      )}
+      <div className="flex flex-col gap-4 h-full overflow-y-auto">
+        {references.length === 0 ? (
+          <span className="text-xs text-muted-foreground mt-2">
+            No references yet
+          </span>
+        ) : (
+          references.map((msg: Message) => (
+            <Card key={msg.id} className="text-xs">
+              <CardContent className="flex flex-col gap-2">
+                <p className="whitespace-pre-wrap">{msg.content}</p>
+                <span className="text-muted-foreground">From: Session 1</span>
+                <div className="flex gap-2">
+                  <Tooltip>
+                    <EditReferenceDialog>
+                      <TooltipTrigger asChild>
+                        <Button variant={"outline"} size={"icon-xs"}>
+                          <Pencil />
+                        </Button>
+                      </TooltipTrigger>
+                    </EditReferenceDialog>
+                    <TooltipContent>Edit reference</TooltipContent>
+                  </Tooltip>
+
+                  <Tooltip>
+                    <DeleteReferenceDialog>
+                      <TooltipTrigger asChild>
+                        <Button variant={"destructive"} size={"icon-xs"}>
+                          <Trash />
+                        </Button>
+                      </TooltipTrigger>
+                    </DeleteReferenceDialog>
+                    <TooltipContent>Delete reference</TooltipContent>
+                  </Tooltip>
+                </div>
+              </CardContent>
+            </Card>
+          ))
+        )}
+      </div>
     </div>
   );
 }

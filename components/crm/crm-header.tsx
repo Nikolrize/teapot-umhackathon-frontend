@@ -30,8 +30,23 @@ import {
 import { Separator } from "../ui/separator";
 import { SidebarTrigger } from "../ui/sidebar";
 import { useState } from "react";
+import { useParams } from "next/navigation";
+import { agents } from "@/lib/data";
+import { Label } from "../ui/label";
 
 export default function CRMHeader() {
+  const params = useParams();
+
+  const agentSlug = params["agentSlug"] as string;
+
+  const formatAgentName = (slug?: string) => {
+    if (!slug) return "";
+
+    const agent = agents.find((item) => item.slug === slug);
+
+    return agent?.name ?? "Unknown Agent";
+  };
+
   return (
     <header className="w-full flex border-b-1 border-muted p-4 items-center justify-between">
       <div className="flex gap-4 items-center">
@@ -39,6 +54,13 @@ export default function CRMHeader() {
         <Separator orientation="vertical" />
         <h1 className="font-bold text-brand-primary">Teapot</h1>
       </div>
+
+      {agentSlug && (
+        <div className="flex gap-2">
+          <Label className="font-bold">{formatAgentName(agentSlug)}</Label>
+        </div>
+      )}
+
       <div className="flex gap-4 items-center">
         <SearchCommandDialog />
       </div>
