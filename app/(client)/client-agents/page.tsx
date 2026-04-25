@@ -8,12 +8,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { agents } from "@/lib/data";
+import { useGetAgents } from "@/hooks/useAgent";
+import { Agent } from "@/types/client-types";
 import { Layers } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export default function ClientAgents() {
   const router = useRouter();
+  const { data: agents = [], isLoading } = useGetAgents();
 
   return (
     <div className="flex flex-col items-center px-20 py-4">
@@ -30,21 +32,21 @@ export default function ClientAgents() {
           </CardHeader>
 
           <CardContent className="grid grid-cols-2 gap-4">
-            {agents.map((item) => (
+            {agents.map((item: Agent) => (
               <Card
-                key={item.name}
-                onClick={() => router.push(`/client-agents/${item.slug}/1`)}
+                key={item.agent_id}
+                onClick={() => router.push(`/client-agents/${item.agent_id}/1`)}
                 className="hover:ring-1 hover:ring-muted-foreground cursor-pointer"
               >
                 <CardHeader>
-                  <CardTitle>{item.name}</CardTitle>
-                  <CardDescription>{item.description}</CardDescription>
+                  <CardTitle>{item.agent_name}</CardTitle>
+                  <CardDescription>{item.task}</CardDescription>
                 </CardHeader>
-                <CardContent>
+                {/* <CardContent>
                   <Label className="text-xs text-muted-foreground">
                     <Layers size={14} /> Sessions: 1
                   </Label>
-                </CardContent>
+                </CardContent> */}
               </Card>
             ))}
           </CardContent>
