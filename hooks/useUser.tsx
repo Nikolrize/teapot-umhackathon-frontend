@@ -11,6 +11,13 @@ export const useGetUserById = (id: string) => {
   });
 };
 
+export const useGetAllUsers = () => {
+  return useQuery<User[]>({
+    queryKey: ["user"],
+    queryFn: () => fetcher(`/api/admin/users`),
+  });
+};
+
 export const useAdminCreateUser = () => {
   const queryClient = useQueryClient();
 
