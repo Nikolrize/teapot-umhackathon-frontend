@@ -10,17 +10,17 @@ import {
 } from "../ui/dialog";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
-import { Message } from "@/types/client-types";
+import { AgentMessage } from "@/types/client-types";
 
 export default function EditReferenceDialog({
   children,
 }: {
   children: ReactNode;
 }) {
-  const [editingRef, setEditingRef] = useState<Message | null>(null);
+  const [editingRef, setEditingRef] = useState<AgentMessage | null>(null);
   const [editText, setEditText] = useState("");
 
-  const handleEditReference = (msg: Message) => {
+  const handleEditReference = (msg: AgentMessage) => {
     setEditingRef(msg);
     setEditText(msg.content ?? "");
   };
