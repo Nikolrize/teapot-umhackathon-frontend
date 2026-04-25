@@ -75,3 +75,15 @@ export const modelSchema = z.object({
     .number("Output token cost is required")
     .min(0, "Output token cost cannot be negative"),
 });
+
+export const packageSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  description: z.string().min(1, "Description is required"),
+  credit: z.number("Credit is required").min(1, "Credit must be more than 0"),
+  price: z
+    .number("Price is required")
+    .min(0, "Price must be more than or equal to 0"),
+  features: z
+    .array(z.object({ value: z.string().min(1, "Cannot be empty") }))
+    .min(1, "At least one feature required"),
+});
