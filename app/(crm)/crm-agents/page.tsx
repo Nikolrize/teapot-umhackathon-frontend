@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -17,14 +18,17 @@ export default function CRMAgents() {
     <div className="flex flex-col items-center px-20 py-4">
       <div className="flex flex-col w-[70vw] gap-4">
         <Card>
-          <CardHeader>
-            <CardTitle className="font-bold text-brand-primary">
-              Agent Settings
-            </CardTitle>
-            <CardDescription>
-              Here are all the agents that can assist client. Click to access
-              their knowledge base settings.
-            </CardDescription>
+          <CardHeader className="flex justify-between items-center">
+            <div>
+              <CardTitle className="font-bold text-brand-primary">
+                Agent Settings
+              </CardTitle>
+              <CardDescription>
+                Here are all the agents that can assist client. Click to access
+                their knowledge base settings.
+              </CardDescription>{" "}
+            </div>
+            <Button className="bg-brand-primary">Add Agent</Button>
           </CardHeader>
 
           <CardContent className="grid grid-cols-2 gap-4">
