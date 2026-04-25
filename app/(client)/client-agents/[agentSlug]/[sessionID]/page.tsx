@@ -157,8 +157,13 @@ export default function AgentSession({ resizeMode }: { resizeMode?: boolean }) {
           content: data.reply,
         },
       ]);
-    } catch {
-      toast.error("Something went wrong. Please try again.");
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "";
+      if (msg.includes("503") || msg.toLowerCase().includes("unavailable")) {
+        toast.error("AI service is unavailable. Please try again in a moment.");
+      } else {
+        toast.error(msg || "Something went wrong. Please try again.");
+      }
     } finally {
       setIsProcessing(false);
     }

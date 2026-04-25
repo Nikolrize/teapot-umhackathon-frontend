@@ -140,12 +140,8 @@ export default function ClientSidebar() {
                   <SidebarMenuSubItem key={agent.agent_id}>
                     <SidebarMenuSubButton
                       onClick={() => handleAgentClick(agent)}
-                      disabled={loadingAgentId === agent.agent_id}
-                      className={
-                        loadingAgentId === agent.agent_id
-                          ? "opacity-50 pointer-events-none"
-                          : "cursor-pointer"
-                      }
+                      aria-disabled={loadingAgentId === agent.agent_id}
+                      className="cursor-pointer"
                     >
                       {agent.agent_name}
                     </SidebarMenuSubButton>

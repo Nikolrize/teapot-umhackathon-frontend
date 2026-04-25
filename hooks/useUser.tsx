@@ -3,11 +3,18 @@ import { useQuery } from "@tanstack/react-query";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetcher } from "./fetcher";
 
-export const useGetUserById = (id: string) => {
+export const useGetUserById = (searchTerm: string) => {
   return useQuery<User>({
-    queryKey: ["user", id],
-    queryFn: () => fetcher(`/api/user/get/${id}`),
-    enabled: !!id,
+    queryKey: ["user", searchTerm],
+    queryFn: () => fetcher(`/api/user/get/${searchTerm}`),
+    enabled: !!searchTerm,
+  });
+};
+
+export const useGetAllUsers = () => {
+  return useQuery<User[]>({
+    queryKey: ["users"],
+    queryFn: () => fetcher(`/api/admin/users`),
   });
 };
 
@@ -31,14 +38,28 @@ export const useUpdateUser = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, ...data }: User) =>
-      fetcher(`/api/user/update/${id}`, {
+    mutationFn: async ({
+      userId,
+      data,
+    }: {
+      userId: string;
+      data: {
+        username: string;
+        email: string;
+        password: string;
+      };
+    }) => {
+      return fetcher(`/api/user/update/${userId}`, {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify(data),
-      }),
+      });
+    },
 
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["users"] });
+      queryClient.invalidateQueries({ queryKey: ["user"] });
     },
   });
 };
@@ -51,6 +72,23 @@ export const useDeleteUser = () => {
       fetcher(`/api/user/delete/${id}`, {
         method: "POST",
       }),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["user"] });
+    },
+  });
+};
+
+export const useUpdateAvatar = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ file }: { file: File }) => {
+      return fetcher(`/api/users/update/avatar`, {
+        method: "POST",
+        body: JSON.stringify({ file}),
+      });
+    },
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });

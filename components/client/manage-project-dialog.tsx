@@ -83,6 +83,7 @@ export default function ManageProjectDialog({
 
     if (val && mode === "create") {
       reset({
+        project_id: "",
         project_name: "",
         project_description: "",
         business_name: "",

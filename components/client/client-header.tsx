@@ -34,6 +34,8 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Label } from "../ui/label";
 import { useParams } from "next/navigation";
 import { useGetAgentWithAgentId } from "@/hooks/useAgent";
+import { useGetUserById } from "@/hooks/useUser";
+import Cookies from "js-cookie";
 
 export default function ClientHeader() {
   const params = useParams();
@@ -155,29 +157,32 @@ export function SearchCommandDialog() {
 }
 
 export function CreditPopover() {
+  const userId = Cookies.get("user_id") ?? "";
+  const { data: user, isLoading: isLoadingUser } = useGetUserById(userId);
+
   return (
     <Popover>
       <PopoverTrigger asChild>
         <Button variant="outline">
           <Coins />
-          12345
+          {user?.max_token}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-80">
         <div className="flex flex-col gap-3">
-          <Label className="font-bold text-brand-primary">Tokens</Label>
+          <Label className="font-bold text-brand-primary">Credits</Label>
           <span className="text-xs text-muted-foreground">
-            Tokens are universal currency you use to generate charts, images,
+            Credits are universal currency you use to generate charts, images,
             tables, or any insights accross Teapot.
           </span>
           <span className="text-xs text-brand-primary underline cursor-pointer">
             Learn More
           </span>
           <Separator />
-          <Label>Your tokens</Label>
+          <Label>Your credits</Label>
           <div className="flex gap-2">
             <Coins size={16} />
-            <span>12345 remaining</span>
+            <span>{user?.max_token} remaining</span>
           </div>
           <Button>Top up</Button>
         </div>

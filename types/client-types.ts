@@ -1,3 +1,5 @@
+import { User } from "./crm-types";
+
 export type Project = {
   project_id: string;
   project_name: string;
@@ -14,7 +16,7 @@ export type AccountFormValues = {
   username: string;
   email: string;
   password: string;
-  confirm_password: string;
+  confirm_password?: string;
 };
 
 export type AgentMessage = {
@@ -107,22 +109,36 @@ export type Agent = {
 };
 
 export type Conversation = {
-  conver_id: string;
-  user_a_id: string;
-  user_b_id: string;
-  created_at: string;
-  user_a_id_user_user_id: string;
-  user_b_id_user_user_id: string;
-  messages: Message;
-}
+  id: string;
+  other_user: User;
+  last_message: string;
+  last_message_at: string;
+  unread_count: number;
+};
 
 export type Message = {
-  message_id: string;
-  conver_id: string;
+  id: string;
+  conversation_id: string;
   sender_id: string;
+  sender_username: string;
   reply_to_id: string;
   content: string;
+  attachment: Attachment | null
   is_deleted: boolean;
   created_at: string;
   updated_at: string;
+};
+
+export type Attachment = {
+  attachment_id: string;
+  file_name: string;
+  file_type: string;
+  file_size: number;
 }
+
+export type SubscriptionPackage = {
+  name: string;
+  setting_key: string;
+  setting_value: number;
+  price: number;
+};
