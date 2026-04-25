@@ -13,6 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import { useLogin } from "@/hooks/uesLogin";
 import {
   ClipboardCheck,
   HatGlasses,
@@ -20,10 +21,13 @@ import {
   MessageCircleMore,
 } from "lucide-react";
 import Image from "next/image";
-import { redirect } from "next/navigation";
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 
 export default function Login() {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const { mutate: login, isPending } = useLogin();
+
   const handleGoogleLogin = () => {
     window.location.href = `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/google/login`;
   };
@@ -62,21 +66,33 @@ export default function Login() {
             <CardContent className="flex flex-col gap-6">
               <div className="flex flex-col gap-2">
                 <Label>Username</Label>
-                <Input id="username" type="text" required />
+                <Input
+                  id="username"
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  required
+                />
               </div>
               <div className="flex flex-col gap-2">
                 <Label>Password</Label>
-                <Input id="password" type="password" required />
+                <Input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
               </div>
 
               <div className="flex flex-col justify-center items-center gap-4">
-                {/* Temporary redirect to homepage */}
                 <Button
                   className="w-full"
-                  size={"lg"}
-                  onClick={() => redirect("/client-home")}
+                  size="lg"
+                  disabled={isPending}
+                  onClick={() => login({ username, password })}
                 >
-                  Login
+                  {isPending ? "Logging in..." : "Login"}
                 </Button>
                 <Separator />
                 <div className="flex flex-col w-full gap-2 ">

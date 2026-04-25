@@ -13,7 +13,7 @@ export type AccountFormValues = {
   username: string;
   email: string;
   password: string;
-  confirmPassword: string;
+  confirm_password: string;
 };
 
 export type Message = {

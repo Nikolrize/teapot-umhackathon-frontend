@@ -35,6 +35,8 @@ import {
 import { Separator } from "../ui/separator";
 import Link from "next/link";
 import { agents } from "@/lib/data";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 
 export default function CRMSidebar() {
   return (
@@ -107,6 +109,13 @@ export default function CRMSidebar() {
 }
 
 export function CRMProfilePopover() {
+  const router = useRouter();
+
+  const handleLogout = () => {
+    Cookies.remove("access_token");
+    router.push("/");
+  };
+
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -132,25 +141,24 @@ export function CRMProfilePopover() {
             Profile
           </PopoverTitle>
         </PopoverHeader>
-
         <Link href={"/crm-account"}>
           <Button variant={"ghost"} className="flex gap-2 justify-start w-full">
             <CircleUser className="text-muted-foreground" /> Account{" "}
           </Button>
         </Link>
-
         <Link href={"/crm-settings"}>
           <Button variant={"ghost"} className="flex gap-2 justify-start w-full">
             <Settings className="text-muted-foreground" /> Settings
           </Button>
         </Link>
-
         <Separator />
-        <a href={"/"}>
-          <Button variant={"ghost"} className="flex gap-2 justify-start w-full">
-            <LogOut className="text-muted-foreground" /> Log out
-          </Button>{" "}
-        </a>
+        <Button
+          variant={"ghost"}
+          className="flex gap-2 justify-start w-full"
+          onClick={() => handleLogout()}
+        >
+          <LogOut className="text-muted-foreground" /> Log out
+        </Button>
       </PopoverContent>
     </Popover>
   );

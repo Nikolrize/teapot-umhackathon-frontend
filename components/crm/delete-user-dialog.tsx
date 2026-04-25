@@ -11,7 +11,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
-import { User } from "@/interfaces/crm-interface";
+import { User } from "@/types/crm-types";
 
 type DeleteUserDialogProps = {
   children: ReactNode;

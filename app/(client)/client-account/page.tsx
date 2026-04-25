@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { AccountFormValues } from "@/interfaces/client-interface";
+import { AccountFormValues } from "@/types/client-types";
 import { Eye, EyeOff, Upload } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -45,7 +45,7 @@ export default function ClientAccount() {
           username: "",
           email: "",
           password: "",
-          confirmPassword: "",
+          confirm_password: "",
         },
   });
 
@@ -153,7 +153,7 @@ export default function ClientAccount() {
                   <div className="relative">
                     <Input
                       type={showConfirmPassword ? "text" : "password"}
-                      {...register("confirmPassword")}
+                      {...register("confirm_password")}
                     />
                     <Button
                       type="button"
@@ -165,9 +165,9 @@ export default function ClientAccount() {
                       {showConfirmPassword ? <EyeOff /> : <Eye />}
                     </Button>
                   </div>
-                  {errors.confirmPassword && (
+                  {errors.confirm_password && (
                     <span className="text-destructive text-xs">
-                      {errors.confirmPassword.message}
+                      {errors.confirm_password.message}
                     </span>
                   )}
                 </div>

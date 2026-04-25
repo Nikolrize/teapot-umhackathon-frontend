@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { User } from "@/interfaces/crm-interface";
+import { User } from "@/types/crm-types";
 import { Button } from "@/components/ui/button";
 import AddUserDialog from "@/components/crm/add-user-dialog";
 

@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Checkbox } from "../ui/checkbox";
 import { DataTableColumnHeader } from "../ui/data-table-column-header";
-import { User } from "@/interfaces/crm-interface";
+import { User } from "@/types/crm-types";
 import EditUserDialog from "./edit-user-dialog";
 import UpdatePasswordDialog from "./update-password-dialog";
 import ManageCreditDialog from "./manage-credits-dialog";

@@ -27,7 +27,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { toast } from "sonner";
-import { Message, Reference } from "@/interfaces/client-interface";
+import { Message, Reference } from "@/types/client-types";
 import EditReferenceDialog from "@/components/client/edit-reference-dialog";
 import DeleteReferenceDialog from "@/components/client/delete-reference-dialog";
 import { useReference } from "@/contexts/reference-provider";

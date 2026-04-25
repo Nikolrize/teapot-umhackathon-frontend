@@ -24,7 +24,7 @@ import { Button } from "../ui/button";
 import { Slider } from "../ui/slider";
 import { Control, Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { ProjectFormValues } from "@/interfaces/client-interface";
+import { ProjectFormValues } from "@/types/client-types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { projectSchema } from "@/schemas/client-schemas";
 

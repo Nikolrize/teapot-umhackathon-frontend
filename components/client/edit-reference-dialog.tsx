@@ -10,7 +10,7 @@ import {
 } from "../ui/dialog";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
-import { Message } from "@/interfaces/client-interface";
+import { Message } from "@/types/client-types";
 
 export default function EditReferenceDialog({
   children,

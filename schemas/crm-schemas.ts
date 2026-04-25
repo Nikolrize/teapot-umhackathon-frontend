@@ -5,8 +5,9 @@ export const createUserSchema = z.object({
   email: z.email("Invalid email"),
   password: z
     .string()
-    .min(6, "Password must have minimum 6 characters")
-    .regex(/[A-Z]/, "Password must contain at least 1 uppercase letter"),
+    .min(8, "Password must have minimum 8 characters")
+    .regex(/[A-Z]/, "Password must contain at least 1 uppercase letter")
+    .regex(/[0-9]/, "Password must contain at least 1 number"),
   role: z.enum(["masterAdmin", "admin", "client"]),
 });
 
@@ -20,13 +21,14 @@ export const passwordSchema = z
   .object({
     password: z
       .string()
-      .min(6, "Password must have minimum 6 characters")
-      .regex(/[A-Z]/, "Password must contain at least 1 uppercase letter"),
-    confirmPassword: z.string(),
+      .min(8, "Password must have minimum 8 characters")
+      .regex(/[A-Z]/, "Password must contain at least 1 uppercase letter")
+      .regex(/[0-9]/, "Password must contain at least 1 number"),
+    confirm_password: z.string(),
   })
-  .refine((data) => data.password === data.confirmPassword, {
+  .refine((data) => data.password === data.confirm_password, {
     message: "Passwords do not match",
-    path: ["confirmPassword"],
+    path: ["confirm_password"],
   });
 
 export const creditSchema = z.object({

@@ -18,7 +18,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { ReactNode } from "react";
-import { User } from "@/interfaces/crm-interface";
+import { User } from "@/types/crm-types";
 import { z } from "zod";
 import { creditSchema } from "@/schemas/crm-schemas";
 

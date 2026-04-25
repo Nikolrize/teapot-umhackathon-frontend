@@ -20,7 +20,7 @@ import { toast } from "sonner";
 import { ReactNode, useState } from "react";
 import { passwordSchema } from "@/schemas/crm-schemas";
 import z from "zod";
-import { User } from "@/interfaces/crm-interface";
+import { User } from "@/types/crm-types";
 import { Eye, EyeOff } from "lucide-react";
 
 type Props = {
@@ -45,7 +45,7 @@ export default function UpdatePasswordDialog({ children, user }: Props) {
     defaultValues: user
       ? {
           password: user.password,
-          confirmPassword: "",
+          confirm_password: "",
         }
       : undefined,
   });
@@ -100,7 +100,7 @@ export default function UpdatePasswordDialog({ children, user }: Props) {
             <div className="relative">
               <Input
                 type={showConfirmPassword ? "text" : "password"}
-                {...register("confirmPassword")}
+                {...register("confirm_password")}
               />
               <Button
                 type="button"
@@ -112,9 +112,9 @@ export default function UpdatePasswordDialog({ children, user }: Props) {
                 {showConfirmPassword ? <EyeOff /> : <Eye />}
               </Button>
             </div>
-            {errors.confirmPassword && (
+            {errors.confirm_password && (
               <span className="text-destructive text-xs">
-                {errors.confirmPassword.message}
+                {errors.confirm_password.message}
               </span>
             )}
           </div>

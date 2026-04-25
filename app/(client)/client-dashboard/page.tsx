@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useDashboard } from "@/contexts/dashboard-provider";
-import { DashboardWidget } from "@/interfaces/client-interface";
+import { DashboardWidget } from "@/types/client-types";
 import { useState } from "react";
 
 export default function ClientDashboard() {

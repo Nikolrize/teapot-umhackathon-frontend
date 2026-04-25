@@ -19,7 +19,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ReactNode } from "react";
 import { toast } from "sonner";
 
-import { User } from "@/interfaces/crm-interface";
+import { User } from "@/types/crm-types";
 import { updateUserSchema } from "@/schemas/crm-schemas";
 import z from "zod";
 import {

@@ -1,6 +1,6 @@
 "use client";
 
-import { DashboardWidget } from "@/interfaces/client-interface";
+import { DashboardWidget } from "@/types/client-types";
 import { createContext, useContext, useState } from "react";
 
 const DashboardContext = createContext<any>(null);

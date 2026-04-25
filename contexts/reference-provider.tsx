@@ -1,6 +1,6 @@
 "use client";
 
-import { Reference } from "@/interfaces/client-interface";
+import { Reference } from "@/types/client-types";
 import { createContext, useContext, useState } from "react";
 
 const ReferenceContext = createContext<any>(null);

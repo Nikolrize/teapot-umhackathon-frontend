@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/alert-dialog";
 
 import { Button } from "@/components/ui/button";
-import { ModelSettings } from "@/interfaces/crm-interface";
+import { ModelSettings } from "@/types/crm-types";
 import { ReactNode, useState } from "react";
 import { toast } from "sonner";
 
