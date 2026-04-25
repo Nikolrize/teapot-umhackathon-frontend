@@ -16,7 +16,7 @@ export type AccountFormValues = {
   username: string;
   email: string;
   password: string;
-  confirm_password: string;
+  confirm_password?: string;
 };
 
 export type AgentMessage = {
@@ -80,3 +80,10 @@ export type Attachment = {
   file_type: string;
   file_size: number;
 }
+
+export type SubscriptionPackage = {
+  name: string;
+  setting_key: string;
+  setting_value: number;
+  price: number;
+};

@@ -13,13 +13,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { SubscriptionPackage } from "@/app/(crm)/crm-subscriptions/page";
 import { Label } from "../ui/label";
 
 import { useForm, useFieldArray } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { packageSchema } from "@/schemas/crm-schemas";
+import { SubscriptionPackage } from "@/types/client-types";
 
 type FormValues = z.infer<typeof packageSchema>;
 
@@ -29,38 +29,22 @@ type Props = {
 };
 
 export default function EditPackageDialog({ children, pkg }: Props) {
-  const form = useForm<FormValues>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  }  = useForm<FormValues>({
     resolver: zodResolver(packageSchema),
     defaultValues: {
       name: pkg.name,
-      description: pkg.description,
-      token: pkg.token,
+      setting_value: pkg.setting_value,
       price: pkg.price,
-      features: pkg.features?.map((f) => ({ value: f })) || [{ value: "" }],
     },
-  });
-
-  const {
-    register,
-    control,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = form;
-
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: "features",
   });
 
   const onSubmit = async (data: FormValues) => {
     try {
-      const updated = {
-        ...data,
-        features: data.features.map((f) => f.value),
-      };
-
-      console.log(updated); // API call here
-
+      
       toast.success(`"${data.name}" updated successfully`);
     } catch (err) {
       toast.error("Failed to update package");
@@ -93,27 +77,16 @@ export default function EditPackageDialog({ children, pkg }: Props) {
               )}
             </div>
 
-            {/* Description */}
-            <div className="flex flex-col gap-2">
-              <Label>Description</Label>
-              <Input {...register("description")} />
-              {errors.description && (
-                <p className="text-destructive text-sm">
-                  {errors.description.message}
-                </p>
-              )}
-            </div>
-
             {/* Token */}
             <div className="flex flex-col gap-2">
               <Label>Tokens</Label>
               <Input
                 type="number"
-                {...register("token", { valueAsNumber: true })}
+                {...register("setting_value", { valueAsNumber: true })}
               />
-              {errors.token && (
+              {errors.setting_value && (
                 <p className="text-destructive text-sm">
-                  {errors.token.message}
+                  {errors.setting_value.message}
                 </p>
               )}
             </div>
@@ -138,49 +111,6 @@ export default function EditPackageDialog({ children, pkg }: Props) {
               {errors.price && (
                 <p className="text-destructive text-sm">
                   {errors.price.message}
-                </p>
-              )}
-            </div>
-
-            {/* Features */}
-            <div className="flex flex-col gap-2">
-              <Label>Features</Label>
-
-              {fields.map((field, index) => (
-                <div key={field.id} className="flex flex-col gap-1">
-                  <div className="flex gap-2">
-                    <Input
-                      {...register(`features.${index}.value`)}
-                      placeholder={`Feature ${index + 1}`}
-                    />
-                    <Button
-                      type="button"
-                      variant="destructive"
-                      onClick={() => remove(index)}
-                    >
-                      Remove
-                    </Button>
-                  </div>
-
-                  {errors.features?.[index]?.value && (
-                    <p className="text-destructive text-sm">
-                      {errors.features[index]?.value?.message}
-                    </p>
-                  )}
-                </div>
-              ))}
-
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => append({ value: "" })}
-              >
-                + Add Feature
-              </Button>
-
-              {errors.features?.message && (
-                <p className="text-destructive text-sm">
-                  {errors.features.message}
                 </p>
               )}
             </div>

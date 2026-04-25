@@ -1,6 +1,5 @@
 "use client";
 
-import { SubscriptionPackage } from "@/app/(crm)/crm-subscriptions/page";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,6 +12,7 @@ import {
 } from "@/components/ui/alert-dialog";
 
 import { Button } from "@/components/ui/button";
+import { SubscriptionPackage } from "@/types/client-types";
 import { ReactNode, useState } from "react";
 import { toast } from "sonner";
 

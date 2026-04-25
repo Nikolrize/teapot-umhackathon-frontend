@@ -13,19 +13,17 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { AccountFormValues } from "@/types/client-types";
 import { Eye, EyeOff, Upload } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { accountSchema } from "@/schemas/client-schemas";
-
-const dummyUser = {
-  id: "u1001",
-  username: "usernameeee",
-  email: "usernameeee@example.com",
-  password: "Password",
-  avatarUrl: "/icons/user.png",
-};
+import Cookies from "js-cookie";
+import {
+  useGetUserById,
+  useUpdateAvatar,
+  useUpdateUser,
+} from "@/hooks/useUser";
 
 export default function ClientAccount() {
   const [image, setImage] = useState<string>("/icons/user.png");
@@ -33,38 +31,80 @@ export default function ClientAccount() {
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
 
+  const userId = Cookies.get("user_id") ?? "";
+  const { data: user, isLoading: isLoadingUser } = useGetUserById(userId);
+  const { mutate: updateUser } = useUpdateUser();
+  const { mutate: updateAvatar } = useUpdateAvatar();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<AccountFormValues>({
+    reset,
+  } = useForm({
     resolver: zodResolver(accountSchema),
-    defaultValues: dummyUser
-      ? dummyUser
-      : {
-          username: "",
-          email: "",
-          password: "",
-          confirm_password: "",
-        },
+    defaultValues: {
+      username: "",
+      email: "",
+      password: "",
+      confirm_password: "",
+    },
   });
+
+  useEffect(() => {
+    if (user) {
+      reset({
+        username: user.username ?? "",
+        email: user.email ?? "",
+        password: "",
+        confirm_password: "",
+      });
+    }
+  }, [user, reset]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    // instant preview
     const imageUrl = URL.createObjectURL(file);
     setImage(imageUrl);
+
+    // upload to backend
+    updateAvatar(
+      { file },
+      {
+        onSuccess: (res: any) => {
+          toast.success("Avatar updated");
+          setImage(res.avatar_url);
+        },
+        onError: () => {
+          toast.error("Avatar upload failed");
+        },
+      },
+    );
   };
 
   const onSubmit = (data: AccountFormValues) => {
-    try {
-      //Update API
-      console.log("ACCOUNT DATA:", data);
-      toast.success("Account Details Updated");
-    } catch (err) {}
+    updateUser(
+      {
+        userId,
+        data: {
+          username: data.username,
+          email: data.email,
+          password: data.password,
+        },
+      },
+      {
+        onSuccess: () => {
+          toast.success("Account Details Updated");
+        },
+        onError: () => {
+          toast.error("Update failed");
+        },
+      },
+    );
   };
-
   return (
     <div className="flex flex-col items-center px-20 py-4">
       <div className="flex flex-col w-[40vw] gap-4">
