@@ -16,7 +16,7 @@ import { Dot, Pencil, Trash } from "lucide-react";
 export type SubscriptionPackage = {
   name: string;
   description: string;
-  credit: number;
+  token: number;
   features: string[];
   price: number;
 };
@@ -24,7 +24,7 @@ export type SubscriptionPackage = {
 export const dummyPackage: SubscriptionPackage = {
   name: "Teapot Plus",
   description: "Keep consulting with expanded access",
-  credit: 100000,
+  token: 100000,
   features: ["feature 1", "feature 2", "feature 3"],
   price: 24,
 };
@@ -86,8 +86,8 @@ export default function CRMSubscriptions() {
 
                 <div>
                   <div className="flex gap-1">
-                    <span className="text-muted-foreground">Credit:</span>
-                    <span className="">{dummyPackage.credit}</span>
+                    <span className="text-muted-foreground">Token:</span>
+                    <span className="">{dummyPackage.token}</span>
                   </div>
                   <div className="flex flex-col gap-1">
                     <span className="text-muted-foreground">Features:</span>

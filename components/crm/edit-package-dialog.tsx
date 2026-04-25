@@ -34,7 +34,7 @@ export default function EditPackageDialog({ children, pkg }: Props) {
     defaultValues: {
       name: pkg.name,
       description: pkg.description,
-      credit: pkg.credit,
+      token: pkg.token,
       price: pkg.price,
       features: pkg.features?.map((f) => ({ value: f })) || [{ value: "" }],
     },
@@ -104,16 +104,16 @@ export default function EditPackageDialog({ children, pkg }: Props) {
               )}
             </div>
 
-            {/* Credit */}
+            {/* Token */}
             <div className="flex flex-col gap-2">
-              <Label>Credits</Label>
+              <Label>Tokens</Label>
               <Input
                 type="number"
-                {...register("credit", { valueAsNumber: true })}
+                {...register("token", { valueAsNumber: true })}
               />
-              {errors.credit && (
+              {errors.token && (
                 <p className="text-destructive text-sm">
-                  {errors.credit.message}
+                  {errors.token.message}
                 </p>
               )}
             </div>

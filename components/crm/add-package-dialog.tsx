@@ -34,7 +34,7 @@ export default function AddPackageDialog({ children }: Props) {
     defaultValues: {
       name: "",
       description: "",
-      credit: 0,
+      token: 0,
       price: 0,
       features: [{ value: "" }],
     },
@@ -108,16 +108,16 @@ export default function AddPackageDialog({ children }: Props) {
               )}
             </div>
 
-            {/* Credit */}
+            {/* Token */}
             <div className="flex flex-col gap-2">
-              <Label>Credits</Label>
+              <Label>Tokens</Label>
               <Input
                 type="number"
-                {...register("credit", { valueAsNumber: true })}
+                {...register("token", { valueAsNumber: true })}
               />
-              {errors.credit && (
+              {errors.token && (
                 <p className="text-destructive text-sm">
-                  {errors.credit.message}
+                  {errors.token.message}
                 </p>
               )}
             </div>

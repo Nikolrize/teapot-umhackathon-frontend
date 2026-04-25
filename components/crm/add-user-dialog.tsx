@@ -49,7 +49,7 @@ export default function AddUserDialog({ children }: Props) {
       username: "",
       email: "",
       password: "",
-      role: "client",
+      role: "Client",
     },
   });
 
@@ -123,8 +123,8 @@ export default function AddUserDialog({ children }: Props) {
                   </SelectTrigger>
 
                   <SelectContent>
-                    <SelectItem value="admin">Admin</SelectItem>
-                    <SelectItem value="client">Client</SelectItem>
+                    <SelectItem value="Admin">Admin</SelectItem>
+                    <SelectItem value="Client">Client</SelectItem>
                   </SelectContent>
                 </Select>
               )}

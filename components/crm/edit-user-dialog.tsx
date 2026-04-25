@@ -113,8 +113,8 @@ export default function EditUserDialog({ children, user }: Props) {
                   </SelectTrigger>
 
                   <SelectContent>
-                    <SelectItem value="admin">Admin</SelectItem>
-                    <SelectItem value="client">Client</SelectItem>
+                    <SelectItem value="Admin">Admin</SelectItem>
+                    <SelectItem value="Client">Client</SelectItem>
                   </SelectContent>
                 </Select>
               )}

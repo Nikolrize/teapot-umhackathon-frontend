@@ -8,13 +8,13 @@ export const createUserSchema = z.object({
     .min(8, "Password must have minimum 8 characters")
     .regex(/[A-Z]/, "Password must contain at least 1 uppercase letter")
     .regex(/[0-9]/, "Password must contain at least 1 number"),
-  role: z.enum(["masterAdmin", "admin", "client"]),
+  role: z.enum(["Master Admin", "Admin", "Client"]),
 });
 
 export const updateUserSchema = z.object({
   username: z.string().min(3, "Username must have minimum 3 characters"),
   email: z.email(),
-  role: z.enum(["masterAdmin", "admin", "client"]),
+  role: z.enum(["Master Admin", "Admin", "Client"]),
 });
 
 export const passwordSchema = z
@@ -31,10 +31,10 @@ export const passwordSchema = z
     path: ["confirm_password"],
   });
 
-export const creditSchema = z.object({
-  credits: z
-    .number({ message: "Credits must be a number" })
-    .min(0, "Credits cannot be negative"),
+export const tokenSchema = z.object({
+  tokens: z
+    .number({ message: "tokens must be a number" })
+    .min(0, "tokens cannot be negative"),
 });
 
 export const modelSchema = z.object({
@@ -81,7 +81,7 @@ export const modelSchema = z.object({
 export const packageSchema = z.object({
   name: z.string().min(1, "Name is required"),
   description: z.string().min(1, "Description is required"),
-  credit: z.number("Credit is required").min(1, "Credit must be more than 0"),
+  token: z.number("Token is required").min(1, "Token must be more than 0"),
   price: z
     .number("Price is required")
     .min(0, "Price must be more than or equal to 0"),

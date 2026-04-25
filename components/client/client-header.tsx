@@ -169,16 +169,16 @@ export function CreditPopover() {
       </PopoverTrigger>
       <PopoverContent className="w-80">
         <div className="flex flex-col gap-3">
-          <Label className="font-bold text-brand-primary">Credits</Label>
+          <Label className="font-bold text-brand-primary">Tokens</Label>
           <span className="text-xs text-muted-foreground">
-            Credits are universal currency you use to generate charts, images,
+            Tokens are universal currency you use to generate charts, images,
             tables, or any insights accross Teapot.
           </span>
           <span className="text-xs text-brand-primary underline cursor-pointer">
             Learn More
           </span>
           <Separator />
-          <Label>Your credits</Label>
+          <Label>Your tokens</Label>
           <div className="flex gap-2">
             <Coins size={16} />
             <span>12345 remaining</span>

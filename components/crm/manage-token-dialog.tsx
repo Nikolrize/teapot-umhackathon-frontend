@@ -20,16 +20,16 @@ import { toast } from "sonner";
 import { ReactNode } from "react";
 import { User } from "@/types/crm-types";
 import { z } from "zod";
-import { creditSchema } from "@/schemas/crm-schemas";
+import { tokenSchema } from "@/schemas/crm-schemas";
 
 type Props = {
   children?: ReactNode;
   user: User;
 };
 
-type CreditForm = z.infer<typeof creditSchema>;
+type CreditForm = z.infer<typeof tokenSchema>;
 
-export default function ManageCreditDialog({ children, user }: Props) {
+export default function ManageTokenDialog({ children, user }: Props) {
   const {
     register,
     handleSubmit,
@@ -37,22 +37,22 @@ export default function ManageCreditDialog({ children, user }: Props) {
     reset,
     watch,
   } = useForm<CreditForm>({
-    resolver: zodResolver(creditSchema),
+    resolver: zodResolver(tokenSchema),
     defaultValues: {
-      credits: user.credits,
+      tokens: user.max_token,
     },
   });
 
-  const credits = watch("credits");
-  const isHighValue = Number(credits) > 1_000_000;
+  const tokens = watch("tokens");
+  const isHighValue = Number(tokens) > 1_000_000;
 
   const onSubmit = (data: CreditForm) => {
     try {
-      console.log("UPDATE CREDITS:", user.userId, data);
-      toast.success("Credits updated successfully");
+      console.log("UPDATE CREDITS:", user.id, data);
+      toast.success("Tokens updated successfully");
       reset();
     } catch (err) {
-      toast.error("Failed to update credits");
+      toast.error("Failed to update tokens");
     }
   };
 
@@ -63,10 +63,10 @@ export default function ManageCreditDialog({ children, user }: Props) {
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="text-brand-primary">
-            Manage Credits
+            Manage Tokens
           </DialogTitle>
           <DialogDescription>
-            Adjust the user's credit balance. This will override the current
+            Adjust the user's token balance. This will override the current
             value.
           </DialogDescription>
         </DialogHeader>
@@ -75,28 +75,28 @@ export default function ManageCreditDialog({ children, user }: Props) {
         <div className="text-sm text-muted-foreground">
           Current balance:{" "}
           <span className="font-semibold text-foreground">
-            {user.credits.toLocaleString()}
+            {user.max_token?.toLocaleString()}
           </span>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <div className="flex flex-col gap-2">
-            <Label>New Credit Amount</Label>
+            <Label>New Token Amount</Label>
 
             <Input
               type="number"
-              {...register("credits", { valueAsNumber: true })}
+              {...register("tokens", { valueAsNumber: true })}
             />
 
-            {errors.credits && (
+            {errors.tokens && (
               <span className="text-destructive text-xs">
-                {errors.credits.message}
+                {errors.tokens.message}
               </span>
             )}
 
             {isHighValue && (
               <span className="text-yellow-600 text-xs">
-                This is a very large credit amount. Please double-check before
+                This is a very large token amount. Please double-check before
                 submitting.
               </span>
             )}
@@ -110,7 +110,7 @@ export default function ManageCreditDialog({ children, user }: Props) {
             </DialogClose>
 
             <Button type="submit" className="bg-brand-primary">
-              Update Credits
+              Update Tokens
             </Button>
           </div>
         </form>

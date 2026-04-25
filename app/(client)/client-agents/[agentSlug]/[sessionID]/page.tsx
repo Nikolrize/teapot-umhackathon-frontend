@@ -278,7 +278,7 @@ export default function AgentSession({ resizeMode }: { resizeMode?: boolean }) {
             {/* Buttons */}
             <div className="flex justify-between items-end">
               <Label className="text-muted-foreground text-xs">
-                Estimated Credit Cost: 0
+                Estimated Token Cost: 0
               </Label>
 
               <div className="flex items-center gap-2">

@@ -16,8 +16,8 @@ import { DataTableColumnHeader } from "../ui/data-table-column-header";
 import { User } from "@/types/crm-types";
 import EditUserDialog from "./edit-user-dialog";
 import UpdatePasswordDialog from "./update-password-dialog";
-import ManageCreditDialog from "./manage-credits-dialog";
 import DeleteUserDialog from "./delete-user-dialog";
+import ManageTokenDialog from "./manage-token-dialog";
 
 export const columns: ColumnDef<User>[] = [
   {
@@ -80,13 +80,13 @@ export const columns: ColumnDef<User>[] = [
   },
 
   {
-    accessorKey: "credits",
-    header: () => <div className="text-right">Credits</div>,
+    accessorKey: "tokens",
+    header: () => <div className="text-right">Tokens</div>,
     cell: ({ row }) => {
-      const credits = row.getValue("credits") as number;
+      const tokens = row.getValue("tokens") as number;
 
       return (
-        <div className="text-right font-medium">{credits.toLocaleString()}</div>
+        <div className="text-right font-medium">{tokens}</div>
       );
     },
   },
@@ -108,7 +108,7 @@ export const columns: ColumnDef<User>[] = [
             <DropdownMenuLabel>Settings</DropdownMenuLabel>
 
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(user.userId)}
+              onClick={() => navigator.clipboard.writeText(user.id)}
             >
               Copy User ID
             </DropdownMenuItem>
@@ -135,15 +135,15 @@ export const columns: ColumnDef<User>[] = [
               </DropdownMenuItem>
             </UpdatePasswordDialog>
 
-            <ManageCreditDialog user={user}>
+            <ManageTokenDialog user={user}>
               <DropdownMenuItem
                 onSelect={(e) => {
                   e.preventDefault();
                 }}
               >
-                Manage Credits
+                Manage Tokens
               </DropdownMenuItem>
-            </ManageCreditDialog>
+            </ManageTokenDialog>
 
             <DeleteUserDialog user={user}>
               <DropdownMenuItem
