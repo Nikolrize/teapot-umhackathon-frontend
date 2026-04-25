@@ -1,7 +1,6 @@
 import ClientHeader from "@/components/client/client-header";
 import ClientSidebar from "@/components/client/client-sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { DashboardProvider } from "@/contexts/dashboard-provider";
 import { ReferenceProvider } from "@/contexts/reference-provider";
@@ -21,7 +20,6 @@ export default function ClientLayout({
             <ReferenceProvider>{children}</ReferenceProvider>
           </DashboardProvider>
         </TooltipProvider>
-        <Toaster />
       </div>
     </SidebarProvider>
   );

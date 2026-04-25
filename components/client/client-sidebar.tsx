@@ -44,6 +44,8 @@ import { Separator } from "../ui/separator";
 import DeleteProjectDialog from "./delete-project-dialog";
 import Link from "next/link";
 import { agents } from "@/lib/data";
+import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 export default function ClientSidebar() {
   return (
@@ -110,6 +112,13 @@ export default function ClientSidebar() {
 }
 
 export function ClientProfilePopover() {
+  const handleLogout = () => {
+    Cookies.remove("access_token");
+    Cookies.remove("user_role");
+    Cookies.remove("user_id");
+    window.location.href = "/"
+  };
+
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -155,11 +164,13 @@ export function ClientProfilePopover() {
         </Link>
 
         <Separator />
-        <a href={"/"}>
-          <Button variant={"ghost"} className="flex gap-2 justify-start w-full">
-            <LogOut className="text-muted-foreground" /> Log out
-          </Button>{" "}
-        </a>
+        <Button
+          variant={"ghost"}
+          className="flex gap-2 justify-start w-full"
+          onClick={() => handleLogout()}
+        >
+          <LogOut className="text-muted-foreground" /> Log out
+        </Button>
       </PopoverContent>
     </Popover>
   );

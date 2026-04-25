@@ -109,11 +109,11 @@ export default function CRMSidebar() {
 }
 
 export function CRMProfilePopover() {
-  const router = useRouter();
-
   const handleLogout = () => {
     Cookies.remove("access_token");
-    router.push("/");
+    Cookies.remove("user_role");
+    Cookies.remove("user_id");
+    window.location.href = "/";
   };
 
   return (

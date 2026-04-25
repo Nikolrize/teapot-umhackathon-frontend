@@ -21,15 +21,21 @@ import {
   MessageCircleMore,
 } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { Suspense, useState } from "react";
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const { mutate: login, isPending } = useLogin();
+  const router = useRouter();
 
   const handleGoogleLogin = () => {
-    window.location.href = `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/google/login`;
+    router.push(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/google/login`);
+  };
+
+  const handleGitHubLogin = () => {
+    router.push(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/github/login`);
   };
 
   return (
@@ -100,6 +106,7 @@ export default function Login() {
                     className="w-full gap-2"
                     size={"lg"}
                     variant={"secondary"}
+                    onClick={() => handleGitHubLogin()}
                   >
                     <Image
                       src={"/icons/github.png"}

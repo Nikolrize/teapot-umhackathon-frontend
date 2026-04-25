@@ -35,7 +35,7 @@ export const useSignup = () => {
     mutationFn: signupRequest,
     onSuccess: () => {
       // after signup → go login OR directly login user (depends on backend)
-      router.push("/login");
+      router.push("/");
     },
   });
 };
