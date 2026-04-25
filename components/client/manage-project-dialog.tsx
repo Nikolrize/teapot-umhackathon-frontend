@@ -24,16 +24,18 @@ import { Button } from "../ui/button";
 import { Slider } from "../ui/slider";
 import { Control, Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { ProjectFormValues } from "@/types/client-types";
+import { Project } from "@/types/client-types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { projectSchema } from "@/schemas/client-schemas";
+import { useCreateProject } from "@/hooks/useProject";
+import Cookies from "js-cookie";
 
 type Mode = "create" | "edit";
 
 type ProjectDialogProps = {
-  children: ReactNode;
+  children?: ReactNode;
   mode?: Mode;
-  projectData?: ProjectFormValues;
+  projectData?: Project;
 };
 
 export default function ManageProjectDialog({
@@ -42,6 +44,9 @@ export default function ManageProjectDialog({
   projectData,
 }: ProjectDialogProps) {
   const [open, setOpen] = useState<boolean>(false);
+  const userId = Cookies.get("user_id") ?? "";
+
+  const { mutate: createProject, isPending } = useCreateProject();
 
   const {
     control,
@@ -49,20 +54,21 @@ export default function ManageProjectDialog({
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<ProjectFormValues>({
+  } = useForm<Project>({
     resolver: zodResolver(projectSchema),
     defaultValues:
       mode === "edit" && projectData
         ? projectData
         : {
-            projectName: "",
-            projectDescription: "",
-            businessName: "",
-            businessType: "",
-            businessContext: "",
+            project_id: "",
+            project_name: "",
+            project_description: "",
+            business_name: "",
+            business_type: "",
+            business_context: "",
             goal: "",
-            budgetMin: 1000,
-            budgetMax: 25000,
+            budget_min: 1000,
+            budget_max: 25000,
           },
   });
 
@@ -75,37 +81,37 @@ export default function ManageProjectDialog({
 
     if (val && mode === "create") {
       reset({
-        projectName: "",
-        projectDescription: "",
-        businessName: "",
-        businessType: "",
-        businessContext: "",
+        project_name: "",
+        project_description: "",
+        business_name: "",
+        business_type: "",
+        business_context: "",
         goal: "",
-        budgetMin: 1000,
-        budgetMax: 25000,
+        budget_min: 1000,
+        budget_max: 25000,
       });
     }
   };
 
-  const onSubmit = (data: ProjectFormValues) => {
-    try {
-      // Create API / Update API
-      console.log("FORM DATA:", data);
-      reset();
-      setOpen(false);
+  const onSubmit = (data: Project) => {
+    createProject(
+      { data, userId: userId },
+      {
+        onSuccess: () => {
+          toast.success("New Project Created");
+          reset();
+          setOpen(false);
+        },
+        onError: () => {
+          toast.error("Unable to create new project");
+        },
+      },
+    );
 
-      if (mode === "edit") {
-        toast.success("Project Updated");
-      } else {
-        toast.success("New Project Created");
-      }
-    } catch (err) {
-      console.error(err);
-      if (mode === "edit") {
-        toast.error("Update failed");
-      } else {
-        toast.error("Unable to create new project");
-      }
+    if (mode === "edit") {
+      toast.success("Project Updated");
+    } else {
+      toast.success("New Project Created");
     }
   };
 
@@ -128,10 +134,10 @@ export default function ManageProjectDialog({
             {/* Project Name */}
             <Label>Project Name:</Label>
             <div className="flex flex-col gap-2">
-              <Input {...register("projectName")} placeholder="Project 1" />
-              {errors.projectName && (
+              <Input {...register("project_name")} placeholder="Project 1" />
+              {errors.project_name && (
                 <span className="text-destructive text-xs">
-                  {errors.projectName.message}
+                  {errors.project_name.message}
                 </span>
               )}
             </div>
@@ -139,7 +145,7 @@ export default function ManageProjectDialog({
             {/* Project Description */}
             <Label>Project Description:</Label>
             <Textarea
-              {...register("projectDescription")}
+              {...register("project_description")}
               placeholder="(optional)"
               maxLength={200}
               className="resize-none"
@@ -148,10 +154,10 @@ export default function ManageProjectDialog({
             {/* Business Name */}
             <Label>Business Name:</Label>
             <div className="flex flex-col gap-2">
-              <Input {...register("businessName")} placeholder="Company A" />
-              {errors.businessName && (
+              <Input {...register("business_name")} placeholder="Company A" />
+              {errors.business_name && (
                 <span className="text-destructive text-xs">
-                  {errors.businessName.message}
+                  {errors.business_name.message}
                 </span>
               )}
             </div>
@@ -184,8 +190,12 @@ export default function ManageProjectDialog({
               <Button>Cancel</Button>
             </DialogClose>
 
-            <Button type="submit" className="bg-brand-primary">
-              Create
+            <Button
+              type="submit"
+              className="bg-brand-primary"
+              disabled={isPending}
+            >
+              {isPending ? "Creating..." : "Create"}
             </Button>
           </div>
         </form>
@@ -194,15 +204,11 @@ export default function ManageProjectDialog({
   );
 }
 
-export function BusinessTypeSelect({
-  control,
-}: {
-  control: Control<ProjectFormValues>;
-}) {
+export function BusinessTypeSelect({ control }: { control: Control<Project> }) {
   return (
     <Controller
       control={control}
-      name="businessType"
+      name="business_type"
       render={({ field, fieldState }) => (
         <div className="flex flex-col gap-2">
           <Select onValueChange={field.onChange} value={field.value} required>
@@ -237,13 +243,13 @@ export function BusinessTypeSelect({
 export function BusinessContextDialog({
   control,
 }: {
-  control: Control<ProjectFormValues>;
+  control: Control<Project>;
 }) {
   const [value, setValue] = useState("");
   return (
     <Controller
       control={control}
-      name="businessContext"
+      name="business_context"
       render={({ field, fieldState }) => (
         <Dialog>
           <div className="flex flex-col gap-2">
@@ -296,11 +302,7 @@ export function BusinessContextDialog({
   );
 }
 
-function BudgetRangeSlider({
-  control,
-}: {
-  control: Control<ProjectFormValues>;
-}) {
+function BudgetRangeSlider({ control }: { control: Control<Project> }) {
   return (
     <div className="flex gap-2 w-full">
       <div className="flex flex-col gap-2 w-full">
@@ -308,7 +310,7 @@ function BudgetRangeSlider({
 
         <Controller
           control={control}
-          name="budgetMin"
+          name="budget_min"
           render={({ field, fieldState }) => (
             <div className="flex flex-col gap-2">
               <Slider
@@ -338,7 +340,7 @@ function BudgetRangeSlider({
 
         <Controller
           control={control}
-          name="budgetMax"
+          name="budget_max"
           render={({ field, fieldState }) => (
             <div className="flex flex-col gap-2">
               <Slider

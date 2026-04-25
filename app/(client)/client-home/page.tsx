@@ -13,14 +13,14 @@ export default function ClientHome() {
             <ClientGuide />
           </CardContent>
         </Card>
-        <Card>
+        {/* <Card>
           <CardHeader>
             <CardTitle className="text-brand-primary  font-bold">Recent</CardTitle>
           </CardHeader>
           <CardContent>
             <Card></Card>
           </CardContent>
-        </Card>
+        </Card> */}
       </div>
     </div>
   );

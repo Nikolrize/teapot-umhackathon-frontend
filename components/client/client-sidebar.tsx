@@ -44,14 +44,26 @@ import { Separator } from "../ui/separator";
 import DeleteProjectDialog from "./delete-project-dialog";
 import Link from "next/link";
 import { agents } from "@/lib/data";
-import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
+import { useGetUserById } from "@/hooks/useUser";
+import { Project } from "@/types/client-types";
+import { User } from "@/types/crm-types";
+import { useCurrentProject } from "@/contexts/current-project-provider";
+import { useGetProjectByUserId } from "@/hooks/useProject";
 
 export default function ClientSidebar() {
+  const userId = Cookies.get("user_id") ?? "";
+  const { data: user, isLoading: isLoadingUser } = useGetUserById(userId);
+  const { data: projects = [] } = useGetProjectByUserId(userId);
+  const { currentProject } = useCurrentProject();
+
   return (
     <Sidebar className="w-fit">
       <SidebarHeader>
-        <ProjectSelectorPopover />
+        <ProjectSelectorPopover
+          currentProject={currentProject}
+          projects={projects}
+        />
       </SidebarHeader>
 
       <SidebarContent className="cursor-pointer">
@@ -105,18 +117,18 @@ export default function ClientSidebar() {
       </SidebarContent>
 
       <SidebarFooter>
-        <ClientProfilePopover />
+        {user && <ClientProfilePopover user={user} />}
       </SidebarFooter>
     </Sidebar>
   );
 }
 
-export function ClientProfilePopover() {
+export function ClientProfilePopover({ user }: { user: User }) {
   const handleLogout = () => {
     Cookies.remove("access_token");
     Cookies.remove("user_role");
     Cookies.remove("user_id");
-    window.location.href = "/"
+    window.location.href = "/";
   };
 
   return (
@@ -128,11 +140,14 @@ export function ClientProfilePopover() {
         >
           <div className="flex flex-1 items-center gap-2">
             <Avatar>
-              <AvatarImage src="/icons/user.png" alt="user-png" />
+              <AvatarImage
+                src={user?.avatar_url ? user.avatar_url : "/icons/user.png"}
+                alt="user-png"
+              />
               <AvatarFallback>CN</AvatarFallback>
-              <AvatarBadge className="bg-green-600" />
+              {/* <AvatarBadge className={user?.status === "online" ? "bg-green-600" : "bg-red-600"} /> */}
             </Avatar>
-            User
+            {user.username}
           </div>
           <EllipsisVertical />
         </SidebarMenuButton>
@@ -147,7 +162,7 @@ export function ClientProfilePopover() {
 
         <Link href={"/client-account"}>
           <Button variant={"ghost"} className="flex gap-2 justify-start w-full">
-            <CircleUser className="text-muted-foreground" /> Account{" "}
+            <CircleUser className="text-muted-foreground" /> Account
           </Button>
         </Link>
 
@@ -176,7 +191,13 @@ export function ClientProfilePopover() {
   );
 }
 
-export function ProjectSelectorPopover() {
+export function ProjectSelectorPopover({
+  projects,
+  currentProject,
+}: {
+  projects: Project[];
+  currentProject: Project | null;
+}) {
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -187,7 +208,7 @@ export function ProjectSelectorPopover() {
                 <Folder />
               </div>
             </Button>
-            Project 1
+            {currentProject?.project_name}
           </div>
           <ListChevronsUpDown />
         </SidebarMenuButton>
@@ -200,7 +221,9 @@ export function ProjectSelectorPopover() {
           </PopoverTitle>
         </PopoverHeader>
 
-        <ManageProjectPopover />
+        {projects.map((item) => (
+          <ManageProjectPopover key={item.project_id} currentProject={item} />
+        ))}
 
         <Separator />
         <ManageProjectDialog>
@@ -220,11 +243,21 @@ export function ProjectSelectorPopover() {
   );
 }
 
-export function ManageProjectPopover() {
+export function ManageProjectPopover({
+  currentProject,
+}: {
+  currentProject: Project;
+}) {
+  const { setCurrentProject } = useCurrentProject();
+
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant={"secondary"} size={"lg"}>
+        <Button
+          variant={"secondary"}
+          size={"lg"}
+          onClick={() => setCurrentProject(currentProject)}
+        >
           <div className="flex flex-1 items-center justify-between gap-2">
             <div className="flex gap-2 items-center">
               <Button size={"icon-sm"} asChild>
@@ -232,7 +265,7 @@ export function ManageProjectPopover() {
                   <Folder />
                 </div>
               </Button>
-              Project 1
+              {currentProject.project_name}
             </div>
             <MoreHorizontal />
           </div>
@@ -246,38 +279,13 @@ export function ManageProjectPopover() {
           </PopoverTitle>
         </PopoverHeader>
 
-        <ManageProjectDialog
-          mode="edit"
-          // Dummy Data
-          projectData={{
-            projectName: "Project 1",
-            projectDescription: "Project Desc 1",
-            businessName: "Business Name",
-            businessType: "Commerce",
-            businessContext: "Business Context",
-            goal: "Goal 1",
-            budgetMin: 20000,
-            budgetMax: 30000,
-          }}
-        >
+        <ManageProjectDialog mode="edit" projectData={currentProject}>
           <Button variant={"secondary"} className="justify-start gap-4">
             <Pencil /> Edit
           </Button>
         </ManageProjectDialog>
 
-        <DeleteProjectDialog
-          // Dummy Data
-          projectData={{
-            projectName: "Project 1",
-            projectDescription: "Project Desc 1",
-            businessName: "Business Name",
-            businessType: "Commerce",
-            businessContext: "Business Context",
-            goal: "Goal 1",
-            budgetMin: 20000,
-            budgetMax: 30000,
-          }}
-        >
+        <DeleteProjectDialog projectData={currentProject}>
           <Button variant={"destructive"} className="justify-start gap-4">
             <Trash /> Delete
           </Button>

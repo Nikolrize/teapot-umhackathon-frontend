@@ -1,12 +1,13 @@
-export type ProjectFormValues = {
-  projectName: string;
-  projectDescription?: string;
-  businessName: string;
-  businessType: string;
-  businessContext: string;
+export type Project = {
+  project_id: string;
+  project_name: string;
+  project_description?: string;
+  business_name: string;
+  business_type: string;
+  business_context: string;
   goal: string;
-  budgetMin: number;
-  budgetMax: number;
+  budget_min: number;
+  budget_max: number;
 };
 
 export type AccountFormValues = {

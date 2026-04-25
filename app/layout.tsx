@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import QueryProvider from "@/contexts/query-provider";
 import { Toaster } from "@/components/ui/sonner";
+import { CurrentProjectProvider } from "@/contexts/current-project-provider";
 
 const inter = Inter({
   variable: "--font-sans",
@@ -22,7 +23,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} h-full antialiased dark`}>
       <body className="min-h-full flex flex-col">
-        <QueryProvider>{children}</QueryProvider>
+        <QueryProvider>
+          <CurrentProjectProvider>{children}</CurrentProjectProvider>
+        </QueryProvider>
         <Toaster />
       </body>
     </html>

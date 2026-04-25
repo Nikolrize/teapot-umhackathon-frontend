@@ -2,6 +2,7 @@ import ClientHeader from "@/components/client/client-header";
 import ClientSidebar from "@/components/client/client-sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { CurrentProjectProvider } from "@/contexts/current-project-provider";
 import { DashboardProvider } from "@/contexts/dashboard-provider";
 import { ReferenceProvider } from "@/contexts/reference-provider";
 

@@ -11,11 +11,11 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
-import { ProjectFormValues } from "@/types/client-types";
+import { Project } from "@/types/client-types";
 
 type DeleteProjectDialogProps = {
   children: ReactNode;
-  projectData: ProjectFormValues;
+  projectData: Project;
 };
 
 export default function DeleteProjectDialog({
@@ -53,7 +53,7 @@ export default function DeleteProjectDialog({
 
           <AlertDialogDescription>
             Are you sure you want to delete{" "}
-            <span className="font-bold">{projectData.projectName}</span>?
+            <span className="font-bold">{projectData.project_name}</span>?
             <br />
             This action cannot be undone.
           </AlertDialogDescription>
