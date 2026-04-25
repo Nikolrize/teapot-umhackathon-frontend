@@ -27,7 +27,7 @@ import { toast } from "sonner";
 import { Project } from "@/types/client-types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { projectSchema } from "@/schemas/client-schemas";
-import { useCreateProject } from "@/hooks/useProject";
+import { useCreateProject, useUpdateProject } from "@/hooks/useProject";
 import Cookies from "js-cookie";
 
 type Mode = "create" | "edit";
@@ -46,7 +46,9 @@ export default function ManageProjectDialog({
   const [open, setOpen] = useState<boolean>(false);
   const userId = Cookies.get("user_id") ?? "";
 
-  const { mutate: createProject, isPending } = useCreateProject();
+  const { mutate: createProject, isPending: isCreating } = useCreateProject();
+  const { mutate: updateProject, isPending: isUpdating } = useUpdateProject();
+  const isPending = isCreating || isUpdating;
 
   const {
     control,
@@ -81,6 +83,7 @@ export default function ManageProjectDialog({
 
     if (val && mode === "create") {
       reset({
+        project_id: "",
         project_name: "",
         project_description: "",
         business_name: "",
@@ -94,24 +97,30 @@ export default function ManageProjectDialog({
   };
 
   const onSubmit = (data: Project) => {
-    createProject(
-      { data, userId: userId },
-      {
+    if (mode === "edit") {
+      updateProject(data, {
         onSuccess: () => {
-          toast.success("New Project Created");
-          reset();
+          toast.success("Project Updated");
           setOpen(false);
         },
         onError: () => {
-          toast.error("Unable to create new project");
+          toast.error("Unable to update project");
         },
-      },
-    );
-
-    if (mode === "edit") {
-      toast.success("Project Updated");
+      });
     } else {
-      toast.success("New Project Created");
+      createProject(
+        { data, userId },
+        {
+          onSuccess: () => {
+            toast.success("New Project Created");
+            reset();
+            setOpen(false);
+          },
+          onError: () => {
+            toast.error("Unable to create new project");
+          },
+        },
+      );
     }
   };
 
@@ -195,7 +204,9 @@ export default function ManageProjectDialog({
               className="bg-brand-primary"
               disabled={isPending}
             >
-              {isPending ? "Creating..." : "Create"}
+              {isPending
+                ? mode === "edit" ? "Updating..." : "Creating..."
+                : mode === "edit" ? "Update" : "Create"}
             </Button>
           </div>
         </form>

@@ -1,4 +1,6 @@
-import { ReactNode, useState } from "react";
+"use client";
+
+import { ReactNode } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -10,13 +12,29 @@ import {
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
 import { Button } from "../ui/button";
+import { useDeleteReference } from "@/hooks/useReferenceApi";
+import { toast } from "sonner";
 
 export default function DeleteReferenceDialog({
   children,
+  referenceId,
+  userId,
 }: {
   children: ReactNode;
+  referenceId: string;
+  userId: string;
 }) {
-  const handleDeleteReference = () => {};
+  const { mutate: deleteReference, isPending } = useDeleteReference();
+
+  const handleDelete = () => {
+    deleteReference(
+      { reference_id: referenceId, user_id: userId },
+      {
+        onSuccess: () => toast.success("Reference deleted"),
+        onError: () => toast.error("Failed to delete reference"),
+      },
+    );
+  };
 
   return (
     <AlertDialog>
@@ -33,14 +51,14 @@ export default function DeleteReferenceDialog({
         </AlertDialogHeader>
 
         <div className="flex justify-end gap-2">
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
           <AlertDialogAction asChild>
             <Button
-              onClick={handleDeleteReference}
+              onClick={handleDelete}
               variant={"destructive"}
-              className="text-destructive"
+              disabled={isPending}
             >
-              Delete
+              {isPending ? "Deleting..." : "Delete"}
             </Button>
           </AlertDialogAction>
         </div>

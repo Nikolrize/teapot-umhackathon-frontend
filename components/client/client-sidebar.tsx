@@ -43,19 +43,54 @@ import {
 import { Separator } from "../ui/separator";
 import DeleteProjectDialog from "./delete-project-dialog";
 import Link from "next/link";
-import { agents } from "@/lib/data";
 import Cookies from "js-cookie";
 import { useGetUserById } from "@/hooks/useUser";
-import { Project } from "@/types/client-types";
+import { useGetAgents } from "@/hooks/useAgent";
+import { useCreateSession } from "@/hooks/useSession";
+import { Project, Agent } from "@/types/client-types";
 import { User } from "@/types/crm-types";
 import { useCurrentProject } from "@/contexts/current-project-provider";
 import { useGetProjectByUserId } from "@/hooks/useProject";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
 
 export default function ClientSidebar() {
   const userId = Cookies.get("user_id") ?? "";
+  const router = useRouter();
   const { data: user, isLoading: isLoadingUser } = useGetUserById(userId);
   const { data: projects = [] } = useGetProjectByUserId(userId);
+  const { data: agents = [] } = useGetAgents();
   const { currentProject } = useCurrentProject();
+  const { mutate: createSession } = useCreateSession();
+  const [loadingAgentId, setLoadingAgentId] = useState<string | null>(null);
+
+  const handleAgentClick = (agent: Agent) => {
+    if (!currentProject) {
+      toast.error("Please create or select a project first");
+      return;
+    }
+
+    setLoadingAgentId(agent.agent_id);
+    createSession(
+      {
+        user_id: userId,
+        project_id: currentProject.project_id,
+        agent_id: agent.agent_id,
+        session_name: `${agent.agent_name} Session`,
+      },
+      {
+        onSuccess: (session) => {
+          router.push(`/client-agents/${agent.agent_id}/${session.session_id}`);
+          setLoadingAgentId(null);
+        },
+        onError: () => {
+          toast.error("Failed to start session");
+          setLoadingAgentId(null);
+        },
+      },
+    );
+  };
 
   return (
     <Sidebar className="w-fit">
@@ -101,12 +136,14 @@ export default function ClientSidebar() {
                 </SidebarMenuButton>
               </Link>
               <SidebarMenuSub>
-                {agents.map((item, i) => (
-                  <SidebarMenuSubItem key={i}>
+                {agents.map((agent: Agent) => (
+                  <SidebarMenuSubItem key={agent.agent_id}>
                     <SidebarMenuSubButton
-                      href={`/client-agents/${item.slug}/1`}
+                      onClick={() => handleAgentClick(agent)}
+                      aria-disabled={loadingAgentId === agent.agent_id}
+                      className="cursor-pointer"
                     >
-                      {item.name}
+                      {agent.agent_name}
                     </SidebarMenuSubButton>
                   </SidebarMenuSubItem>
                 ))}

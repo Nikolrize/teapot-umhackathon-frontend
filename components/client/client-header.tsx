@@ -33,7 +33,7 @@ import { useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Label } from "../ui/label";
 import { useParams } from "next/navigation";
-import { agents } from "@/lib/data";
+import { useGetAgentWithAgentId } from "@/hooks/useAgent";
 import { useGetUserById } from "@/hooks/useUser";
 import Cookies from "js-cookie";
 
@@ -42,13 +42,9 @@ export default function ClientHeader() {
 
   const agentSlug = params["agentSlug"] as string;
 
-  const formatAgentName = (slug?: string) => {
-    if (!slug) return "";
+  const { data: agent } = useGetAgentWithAgentId(agentSlug || "");
 
-    const agent = agents.find((item) => item.slug === slug);
-
-    return agent?.name ?? "Unknown Agent";
-  };
+  const agentName = agent?.agent_name ?? "Unknown Agent";
 
   return (
     <header className="w-full flex border-b-1 border-muted p-4 items-center justify-between">
@@ -60,7 +56,7 @@ export default function ClientHeader() {
 
       {agentSlug && (
         <div className="flex gap-2">
-          <Label className="font-bold">{formatAgentName(agentSlug)}</Label>
+          <Label className="font-bold">{agentName}</Label>
         </div>
       )}
 

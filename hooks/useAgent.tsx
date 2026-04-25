@@ -53,7 +53,7 @@ export function useUpdateAgent() {
       data: Partial<Agent>;
     }) =>
       fetcher(`/admin/agents/update/${agentId}`, {
-        method: "PUT",
+        method: "POST",
         body: JSON.stringify(data),
       }),
 
@@ -72,7 +72,7 @@ export function useDeleteAgent() {
   return useMutation({
     mutationFn: (agentId: string) =>
       fetcher(`/admin/agents/delete/${agentId}`, {
-        method: "DELETE",
+        method: "POST",
       }),
 
     onSuccess: () => {

@@ -3,6 +3,7 @@
 import { accountSchema } from "@/schemas/client-schemas";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import z from "zod";
 
 type SignupForm = z.infer<typeof accountSchema>;
@@ -21,8 +22,8 @@ const signupRequest = async (data: SignupForm) => {
   );
 
   if (!res.ok) {
-    const error = await res.json();
-    throw new Error(error?.message || "Signup failed");
+    const error = await res.json().catch(() => ({}));
+    throw new Error(error?.detail || error?.message || "Signup failed");
   }
 
   return res.json();
@@ -34,8 +35,11 @@ export const useSignup = () => {
   return useMutation({
     mutationFn: signupRequest,
     onSuccess: () => {
-      // after signup → go login OR directly login user (depends on backend)
-      router.push("/");
+      toast.success("Account created! Please log in.");
+      router.push("/login");
+    },
+    onError: (error) => {
+      toast.error(error.message || "Signup failed. Please try again.");
     },
   });
 };

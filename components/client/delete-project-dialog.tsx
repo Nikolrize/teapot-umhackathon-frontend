@@ -12,6 +12,7 @@ import {
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
 import { Project } from "@/types/client-types";
+import { useDeleteProject } from "@/hooks/useProject";
 
 type DeleteProjectDialogProps = {
   children: ReactNode;
@@ -23,22 +24,18 @@ export default function DeleteProjectDialog({
   projectData,
 }: DeleteProjectDialogProps) {
   const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const { mutate: deleteProject, isPending } = useDeleteProject();
 
-  const handleDelete = async () => {
-    try {
-      setLoading(true);
-
-      // Delete API
-
-      toast.success("Project deleted");
-      setOpen(false);
-    } catch (err) {
-      console.error(err);
-      toast.error("Failed to delete project");
-    } finally {
-      setLoading(false);
-    }
+  const handleDelete = () => {
+    deleteProject(projectData.project_id, {
+      onSuccess: () => {
+        toast.success("Project deleted");
+        setOpen(false);
+      },
+      onError: () => {
+        toast.error("Failed to delete project");
+      },
+    });
   };
 
   return (
@@ -60,16 +57,15 @@ export default function DeleteProjectDialog({
         </AlertDialogHeader>
 
         <div className="flex gap-2 justify-end">
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
 
           <AlertDialogAction asChild>
             <Button
               variant={"destructive"}
               onClick={handleDelete}
-              disabled={loading}
-              className="text-destructive"
+              disabled={isPending}
             >
-              {loading ? "Deleting..." : "Delete"}
+              {isPending ? "Deleting..." : "Delete"}
             </Button>
           </AlertDialogAction>
         </div>

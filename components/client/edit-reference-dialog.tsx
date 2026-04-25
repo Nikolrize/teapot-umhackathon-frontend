@@ -1,3 +1,5 @@
+"use client";
+
 import { ReactNode, useState } from "react";
 import {
   Dialog,
@@ -10,36 +12,34 @@ import {
 } from "../ui/dialog";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
-import { AgentMessage } from "@/types/client-types";
+import { BackendReference } from "@/types/client-types";
+import { useUpdateReference } from "@/hooks/useReferenceApi";
+import { toast } from "sonner";
 
 export default function EditReferenceDialog({
   children,
+  reference,
+  userId,
 }: {
   children: ReactNode;
+  reference: BackendReference;
+  userId: string;
 }) {
-  const [editingRef, setEditingRef] = useState<AgentMessage | null>(null);
-  const [editText, setEditText] = useState("");
+  const [editText, setEditText] = useState(reference.content);
+  const { mutate: updateReference, isPending } = useUpdateReference();
 
-  const handleEditReference = (msg: AgentMessage) => {
-    setEditingRef(msg);
-    setEditText(msg.content ?? "");
-  };
-
-  const handleSaveReference = () => {
-    if (!editingRef) return;
-
-    // setReferenceMessages((prev) =>
-    //   prev.map((m) =>
-    //     m.id === editingRef.id ? { ...m, content: editText } : m,
-    //   ),
-    // );
-
-    setEditingRef(null);
-    setEditText("");
+  const handleSave = () => {
+    updateReference(
+      { reference_id: reference.reference_id, user_id: userId, content: editText },
+      {
+        onSuccess: () => toast.success("Reference updated"),
+        onError: () => toast.error("Failed to update reference"),
+      },
+    );
   };
 
   return (
-    <Dialog>
+    <Dialog onOpenChange={(open) => { if (open) setEditText(reference.content); }}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
@@ -57,14 +57,16 @@ export default function EditReferenceDialog({
 
         <div className="flex justify-end gap-2">
           <DialogClose asChild>
-            <Button onClick={() => setEditingRef(null)}>
-              Cancel
-            </Button>
+            <Button variant="outline">Cancel</Button>
           </DialogClose>
           <DialogClose asChild>
-          <Button onClick={handleSaveReference} className="bg-brand-primary">
-            Save
-          </Button>
+            <Button
+              onClick={handleSave}
+              className="bg-brand-primary"
+              disabled={isPending}
+            >
+              {isPending ? "Saving..." : "Save"}
+            </Button>
           </DialogClose>
         </div>
       </DialogContent>

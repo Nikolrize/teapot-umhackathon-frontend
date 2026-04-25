@@ -1,6 +1,4 @@
-import { User } from "@/types/crm-types";
-import { useQuery } from "@tanstack/react-query";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetcher } from "./fetcher";
 import { Project } from "@/types/client-types";
 
@@ -44,8 +42,8 @@ export const useUpdateProject = () => {
 
   return useMutation<Project, Error, Project>({
     mutationFn: ({ project_id, ...data }) =>
-      fetcher(`/client/projects/update/${[project_id]}`, {
-        method: "PUT",
+      fetcher(`/client/projects/update/${project_id}`, {
+        method: "POST",
         body: JSON.stringify(data),
       }),
 
@@ -61,7 +59,7 @@ export const useDeleteProject = () => {
   return useMutation({
     mutationFn: (id: string) =>
       fetcher(`/client/projects/delete/${id}`, {
-        method: "DELETE",
+        method: "POST",
       }),
 
     onSuccess: () => {

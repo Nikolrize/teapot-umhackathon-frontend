@@ -21,10 +21,65 @@ export type AccountFormValues = {
 
 export type AgentMessage = {
   id: string;
+  prompt_id?: string;
   role: "client" | "agent";
   content?: string;
   files?: File[];
   references?: string[];
+};
+
+export type Session = {
+  session_id: string;
+  user_id: string;
+  project_id: string;
+  agent_id: string;
+  agent_name: string;
+  session_name: string;
+  project_name: string;
+  business_name: string;
+  business_type: string;
+  business_context: string;
+  budget_min: number | null;
+  budget_max: number | null;
+  goal: string | null;
+  requirements: string;
+  task: string;
+  max_token: number;
+  temperature: number;
+  top_p: number;
+  model_id: string | null;
+  isdisable: boolean;
+};
+
+export type BackendMessage = {
+  prompt_id: string;
+  session_id: string;
+  content: string;
+  content_type: "prompt" | "reply";
+  timestamp: string;
+};
+
+export type BackendReference = {
+  reference_id: string;
+  user_id: string;
+  agent_id: string;
+  session_id: string;
+  content: string;
+};
+
+export type DashboardContent = {
+  content_id: string;
+  prompt_id: string;
+  dashboard_id: string;
+  content: string;
+  index: number;
+};
+
+export type Dashboard = {
+  dashboard_id: string;
+  user_id: string;
+  project_id: string;
+  content: DashboardContent[];
 };
 
 export type DashboardWidget = {
