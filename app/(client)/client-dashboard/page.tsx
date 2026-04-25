@@ -2,13 +2,21 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { useDashboard } from "@/contexts/dashboard-provider";
-import { DashboardWidget } from "@/types/client-types";
+import { useGetDashboard } from "@/hooks/useDashboardApi";
+import { useCurrentProject } from "@/contexts/current-project-provider";
+import { DashboardContent } from "@/types/client-types";
 import { useState } from "react";
 
 export default function ClientDashboard() {
   const [editing, setEditing] = useState<boolean>(false);
-  const { widgets } = useDashboard();
+  const { currentProject } = useCurrentProject();
+  const { data: dashboard } = useGetDashboard(currentProject?.project_id ?? "");
+
+  const widgets = (dashboard?.content ?? []).map((item: DashboardContent) => ({
+    id: item.content_id,
+    type: "agent_message" as const,
+    data: { content: item.content },
+  }));
 
   return (
     <div className="flex flex-col items-center px-20 py-4">
@@ -28,10 +36,12 @@ export default function ClientDashboard() {
               No widgets added yet
             </p>
           ) : (
-            widgets.map((widget: any) => (
+            widgets.map((widget) => (
               <Card key={widget.id} className="col-span-4">
                 <CardContent className="p-3">
-                  <WidgetRenderer widget={widget} />
+                  <div className="text-sm whitespace-pre-wrap">
+                    {widget.data.content}
+                  </div>
                 </CardContent>
               </Card>
             ))
@@ -40,19 +50,4 @@ export default function ClientDashboard() {
       </div>
     </div>
   );
-}
-
-function WidgetRenderer({ widget }: { widget: DashboardWidget }) {
-  switch (widget.type) {
-    case "agent_message":
-      return (
-        <div className="text-sm whitespace-pre-wrap">{widget.data.content}</div>
-      );
-
-    case "file":
-      return <div className="text-sm">📎 {widget.data.name}</div>;
-
-    default:
-      return <div>Unknown widget</div>;
-  }
 }

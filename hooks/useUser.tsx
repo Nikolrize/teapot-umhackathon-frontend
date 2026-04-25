@@ -33,7 +33,7 @@ export const useUpdateUser = () => {
   return useMutation({
     mutationFn: ({ id, ...data }: User) =>
       fetcher(`/api/user/update/${id}`, {
-        method: "PUT",
+        method: "POST",
         body: JSON.stringify(data),
       }),
 
@@ -49,7 +49,7 @@ export const useDeleteUser = () => {
   return useMutation({
     mutationFn: (id: string) =>
       fetcher(`/api/user/delete/${id}`, {
-        method: "DELETE",
+        method: "POST",
       }),
 
     onSuccess: () => {
