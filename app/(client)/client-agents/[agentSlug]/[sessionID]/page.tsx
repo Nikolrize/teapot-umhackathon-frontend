@@ -27,7 +27,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { toast } from "sonner";
-import { Message, Reference } from "@/types/client-types";
+import { AgentMessage, Reference } from "@/types/client-types";
 import EditReferenceDialog from "@/components/client/edit-reference-dialog";
 import DeleteReferenceDialog from "@/components/client/delete-reference-dialog";
 import { useReference } from "@/contexts/reference-provider";
@@ -39,7 +39,7 @@ import {
 } from "@/components/ui/popover";
 import RenameSessionDialog from "@/components/crm/rename-session-dialog";
 import DeleteSessionDialog from "@/components/crm/delete-session-dialog";
-const dummyMessage: Message[] = [
+const dummyMessage: AgentMessage[] = [
   {
     id: "1",
     role: "client",
@@ -63,7 +63,7 @@ const dummyMessage: Message[] = [
 ];
 
 export default function AgentSession({ resizeMode }: { resizeMode?: boolean }) {
-  const [messages, setMessages] = useState<Message[]>(dummyMessage);
+  const [messages, setMessages] = useState<AgentMessage[]>(dummyMessage);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [input, setInput] = useState("");
   const [files, setFiles] = useState<File[]>([]);
@@ -93,7 +93,7 @@ export default function AgentSession({ resizeMode }: { resizeMode?: boolean }) {
   const handleSend = () => {
     if (!input.trim() && files.length === 0) return;
 
-    const userMessage: Message = {
+    const userMessage: AgentMessage = {
       id: crypto.randomUUID(),
       role: "client",
       content: input,
@@ -119,7 +119,7 @@ export default function AgentSession({ resizeMode }: { resizeMode?: boolean }) {
     // }, 800);
   };
 
-  const handleAddReference = (msg: Message) => {
+  const handleAddReference = (msg: AgentMessage) => {
     try {
       addReference(msg);
       toast.success("Added to references");
@@ -129,7 +129,7 @@ export default function AgentSession({ resizeMode }: { resizeMode?: boolean }) {
     }
   };
 
-  const handleAddToDashboard = (msg: Message) => {
+  const handleAddToDashboard = (msg: AgentMessage) => {
     try {
       addWidget({
         id: crypto.randomUUID(),
@@ -391,7 +391,7 @@ export function ReferenceSheet({ references }: { references: Reference[] }) {
             No references yet
           </span>
         ) : (
-          references.map((msg: Message) => (
+          references.map((msg: AgentMessage) => (
             <Card key={msg.id} className="text-xs">
               <CardContent className="flex flex-col gap-2">
                 <p className="whitespace-pre-wrap">{msg.content}</p>
