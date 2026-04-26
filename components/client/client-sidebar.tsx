@@ -93,7 +93,7 @@ export default function ClientSidebar() {
   };
 
   return (
-    <Sidebar className="w-fit">
+    <Sidebar>
       <SidebarHeader>
         <ProjectSelectorPopover
           currentProject={currentProject}
@@ -141,7 +141,7 @@ export default function ClientSidebar() {
                     <SidebarMenuSubButton
                       onClick={() => handleAgentClick(agent)}
                       aria-disabled={loadingAgentId === agent.agent_id}
-                      className="cursor-pointer"
+                      className="cursor-pointer w-max"
                     >
                       {agent.agent_name}
                     </SidebarMenuSubButton>

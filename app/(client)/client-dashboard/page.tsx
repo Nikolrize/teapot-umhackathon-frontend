@@ -30,23 +30,22 @@ export default function ClientDashboard() {
             {editing ? "Save" : "Edit"} Dashboard
           </Button>
         </div>
-        <div className="grid grid-cols-12 gap-4">
-          {widgets.length === 0 ? (
-            <p className="text-muted-foreground text-sm">
-              No widgets added yet
-            </p>
-          ) : (
-            widgets.map((widget) => (
-              <Card key={widget.id} className="col-span-4">
+
+        {widgets.length === 0 ? (
+          <p className="text-muted-foreground text-sm">No widgets added yet</p>
+        ) : (
+          widgets.map((widget) => (
+            <div key={widget.id} className="grid grid-cols-12 gap-4">
+              <Card className="col-span-4">
                 <CardContent className="p-3">
                   <div className="text-sm whitespace-pre-wrap">
                     {widget.data.content}
                   </div>
                 </CardContent>
               </Card>
-            ))
-          )}
-        </div>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );

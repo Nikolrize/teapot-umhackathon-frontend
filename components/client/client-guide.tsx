@@ -13,6 +13,7 @@ import {
 import { Label } from "../ui/label";
 import { Button } from "../ui/button";
 import ManageProjectDialog from "./manage-project-dialog";
+import Link from "next/link";
 
 const Circle = forwardRef<
   HTMLDivElement,
@@ -42,17 +43,17 @@ export function ClientGuide() {
 
   return (
     <div
-      className="relative flex w-full max-w-[1000px] items-center justify-center overflow-hidden p-4"
+      className="relative flex w-full items-center justify-center overflow-hidden p-4"
       ref={containerRef}
     >
       <div className="flex size-full flex-col items-stretch justify-between gap-10">
         <div className="flex flex-row justify-between text-center">
-          <div className="flex flex-col items-center gap-4 max-w-50">
+          <div className="flex flex-col items-center gap-4 max-w-[15vw]">
             <Circle ref={div1Ref}>
               <Folder />
             </Circle>
             <Label className="text-lg">Create Project</Label>
-            <span className="text-muted-foreground max-w-50">
+            <span className="text-muted-foreground">
               Set up a workspace to organise your data, goals, and decisions in
               one place.
             </span>
@@ -60,38 +61,45 @@ export function ClientGuide() {
               <Button variant={"secondary"}>Create New Project</Button>
             </ManageProjectDialog>
           </div>
-          <div className="flex flex-col items-center gap-4">
+          <div className="flex flex-col items-center gap-4 max-w-[15vw]">
             <Circle ref={div2Ref}>
               <HatGlasses />
             </Circle>
+
             <Label className="text-lg">Browse Agents</Label>
-            <span className="text-muted-foreground max-w-50">
+            <span className="text-muted-foreground">
               Explore a range of AI agents designed to analyze, predict, and
               optimize different aspects of your business.
             </span>
-            <Button variant={"secondary"}>View Agents</Button>
+            <Link href={"/client-agents"}>
+              <Button variant={"secondary"}>View Agents</Button>
+            </Link>
           </div>
-          <div className="flex flex-col items-center gap-4">
+          <div className="flex flex-col items-center gap-4 max-w-[15vw]">
             <Circle ref={div3Ref}>
               <LayoutDashboard />
             </Circle>
             <Label className="text-lg">Customise Dashboard</Label>
-            <span className="text-muted-foreground max-w-50">
+            <span className="text-muted-foreground">
               Tailor your dashboard to display the insights, metrics, and agents
               that matter most to you.
             </span>
-            <Button variant={"secondary"}>View Dashboard</Button>
+            <Link href={"/client-dashboard"}>
+              <Button variant={"secondary"}>View Dashboard</Button>
+            </Link>
           </div>
-          <div className="flex flex-col items-center gap-4">
+          <div className="flex flex-col items-center gap-4 max-w-[15vw]">
             <Circle ref={div4Ref}>
               <MessageCircleMore />
             </Circle>
             <Label className="text-lg">Share Insights</Label>
-            <span className="text-muted-foreground max-w-50">
+            <span className="text-muted-foreground">
               Export or share your analysis and results with your team to
               support better, data-driven decisions.
             </span>
-            <Button variant={"secondary"}>View Chat</Button>
+            <Link href={"/client-chat"}>
+              <Button variant={"secondary"}>View Chat</Button>
+            </Link>
           </div>
         </div>
       </div>

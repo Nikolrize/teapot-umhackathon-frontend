@@ -1,17 +1,12 @@
 "use client";
 
 import {
-  BadgeMinus,
-  ChartNoAxesCombined,
+  Bot,
   Coins,
   CreditCard,
   HomeIcon,
   LayoutDashboard,
   MessageCircleMore,
-  Notebook,
-  Pencil,
-  Scale,
-  ScanSearch,
   Search,
   Settings,
   UserCircle,
@@ -32,10 +27,15 @@ import { SidebarTrigger } from "../ui/sidebar";
 import { useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Label } from "../ui/label";
-import { useParams } from "next/navigation";
-import { useGetAgentWithAgentId } from "@/hooks/useAgent";
+import { useParams, useRouter } from "next/navigation";
+import { useGetAgents, useGetAgentWithAgentId } from "@/hooks/useAgent";
 import { useGetUserById } from "@/hooks/useUser";
 import Cookies from "js-cookie";
+import Link from "next/link";
+import { Agent } from "@/types/client-types";
+import { useCreateSession } from "@/hooks/useSession";
+import { useCurrentProject } from "@/contexts/current-project-provider";
+import { toast } from "sonner";
 
 export default function ClientHeader() {
   const params = useParams();
@@ -71,6 +71,37 @@ export default function ClientHeader() {
 export function SearchCommandDialog() {
   const [open, setOpen] = useState<boolean>(false);
 
+  const { data: agents = [], isLoading } = useGetAgents();
+  const { currentProject } = useCurrentProject();
+  const { mutate: createSession } = useCreateSession();
+
+  const userId = Cookies.get("user_id") ?? "";
+  const router = useRouter();
+
+  const handleAgentClick = (agent: Agent) => {
+    if (!currentProject) {
+      toast.error("Please create or select a project first");
+      return;
+    }
+
+    createSession(
+      {
+        user_id: userId,
+        project_id: currentProject.project_id,
+        agent_id: agent.agent_id,
+        session_name: `${agent.agent_name} Session`,
+      },
+      {
+        onSuccess: (session) => {
+          router.push(`/client-agents/${agent.agent_id}/${session.session_id}`);
+        },
+        onError: () => {
+          toast.error("Failed to start session");
+        },
+      },
+    );
+  };
+
   return (
     <div>
       <Button
@@ -86,68 +117,60 @@ export function SearchCommandDialog() {
           <CommandList>
             <CommandEmpty>No results found.</CommandEmpty>
             <CommandGroup heading="Navigation">
-              <CommandItem>
-                <HomeIcon />
-                <span>Home</span>
-              </CommandItem>
-              <CommandItem>
-                <LayoutDashboard />
-                <span>Dashboard</span>
-              </CommandItem>
-              <CommandItem>
-                <MessageCircleMore />
-                <span>Chat</span>
-              </CommandItem>
+              <Link href="/client-home">
+                <CommandItem>
+                  <HomeIcon />
+                  <span>Home</span>
+                </CommandItem>
+              </Link>
+              <Link href="/client-dashboard">
+                <CommandItem>
+                  <LayoutDashboard />
+                  <span>Dashboard</span>
+                </CommandItem>
+              </Link>
+              <Link href="/client-chat">
+                <CommandItem>
+                  <MessageCircleMore />
+                  <span>Chat</span>
+                </CommandItem>
+              </Link>
             </CommandGroup>
 
             <CommandSeparator />
 
             <CommandGroup heading="Profile">
-              <CommandItem>
-                <UserCircle />
-                <span>Account</span>
-              </CommandItem>
-              <CommandItem>
-                <Settings />
-                <span>Settings</span>
-              </CommandItem>
-              <CommandItem>
-                <CreditCard />
-                <span>Subscriptions</span>
-              </CommandItem>
+              <Link href="/client-account">
+                <CommandItem>
+                  <UserCircle />
+                  <span>Account</span>
+                </CommandItem>
+              </Link>
+              <Link href="/client-settings">
+                <CommandItem>
+                  <Settings />
+                  <span>Settings</span>
+                </CommandItem>
+              </Link>
+              <Link href="/client-subscriptions">
+                <CommandItem>
+                  <CreditCard />
+                  <span>Subscriptions</span>
+                </CommandItem>
+              </Link>
             </CommandGroup>
 
             <Separator />
 
             <CommandGroup heading="Agents">
-              <CommandItem>
-                <ChartNoAxesCombined />
-                <span>Sales Predictor</span>
-              </CommandItem>
-              <CommandItem>
-                <ScanSearch />
-                <span>Pain Point Analyser</span>
-              </CommandItem>
-              <CommandItem>
-                <Coins />
-                <span>Profit Optimiser</span>
-              </CommandItem>
-              <CommandItem>
-                <Scale />
-                <span>Decision Recommendation</span>
-              </CommandItem>
-              <CommandItem>
-                <BadgeMinus />
-                <span>Risk Identifier</span>
-              </CommandItem>
-              <CommandItem>
-                <Pencil />
-                <span>Scenario Simulator</span>
-              </CommandItem>
-              <CommandItem>
-                <Notebook />
-                <span>Resource Optimiser</span>
-              </CommandItem>
+              {agents.map((item: Agent) => (
+                <div key={item.agent_id} onClick={() => handleAgentClick(item)}>
+                  <CommandItem>
+                    <Bot />
+                    <span>{item.agent_name}</span>
+                  </CommandItem>
+                </div>
+              ))}
             </CommandGroup>
           </CommandList>
         </Command>
@@ -184,7 +207,9 @@ export function CreditPopover() {
             <Coins size={16} />
             <span>{user?.max_token} remaining</span>
           </div>
-          <Button>Top up</Button>
+          <Link href={"/client-subscriptions"}>
+            <Button className="w-full">Top up</Button>
+          </Link>
         </div>
       </PopoverContent>
     </Popover>

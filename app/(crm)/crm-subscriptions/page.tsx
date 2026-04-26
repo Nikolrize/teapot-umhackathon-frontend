@@ -64,7 +64,7 @@ export default function CRMSubscriptions() {
                     <span className="text-muted-foreground">RM</span>
                     <span className="font-semibold text-2xl">{item.price}</span>
                     <span className="text-muted-foreground text-xs">
-                      /month
+                      / token
                     </span>
                   </div>
 

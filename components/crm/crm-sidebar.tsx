@@ -34,13 +34,56 @@ import {
 } from "../ui/popover";
 import { Separator } from "../ui/separator";
 import Link from "next/link";
-import { agents } from "@/lib/data";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { Agent } from "@/types/client-types";
+import { useGetUserById } from "@/hooks/useUser";
+import { useGetProjectByUserId } from "@/hooks/useProject";
+import { useGetAgents } from "@/hooks/useAgent";
+import { useCurrentProject } from "@/contexts/current-project-provider";
+import { useCreateSession } from "@/hooks/useSession";
+import { useState } from "react";
 
 export default function CRMSidebar() {
+  const userId = Cookies.get("user_id") ?? "";
+  const router = useRouter();
+  const { data: user, isLoading: isLoadingUser } = useGetUserById(userId);
+  const { data: projects = [] } = useGetProjectByUserId(userId);
+  const { data: agents = [] } = useGetAgents();
+  const { currentProject } = useCurrentProject();
+  const { mutate: createSession } = useCreateSession();
+  const [loadingAgentId, setLoadingAgentId] = useState<string | null>(null);
+
+  const handleAgentClick = (agent: Agent) => {
+    if (!currentProject) {
+      toast.error("Please create or select a project first");
+      return;
+    }
+
+    setLoadingAgentId(agent.agent_id);
+    createSession(
+      {
+        user_id: userId,
+        project_id: currentProject.project_id,
+        agent_id: agent.agent_id,
+        session_name: `${agent.agent_name} Session`,
+      },
+      {
+        onSuccess: (session) => {
+          router.push(`/crm-agents/${agent.agent_id}/${session.session_id}`);
+          setLoadingAgentId(null);
+        },
+        onError: () => {
+          toast.error("Failed to start session");
+          setLoadingAgentId(null);
+        },
+      },
+    );
+  };
+
   return (
-    <Sidebar className="w-fit">
+    <Sidebar>
       <SidebarHeader className="p-4">
         <h1 className="font-bold text-brand-primary">CRM</h1>
       </SidebarHeader>
@@ -88,10 +131,14 @@ export default function CRMSidebar() {
                 </SidebarMenuButton>
               </Link>
               <SidebarMenuSub>
-                {agents.map((item, i) => (
-                  <SidebarMenuSubItem key={i}>
-                    <SidebarMenuSubButton href={`/crm-agents/${item.slug}/1`}>
-                      {item.name}
+                {agents.map((agent: Agent) => (
+                  <SidebarMenuSubItem key={agent.agent_id}>
+                    <SidebarMenuSubButton
+                      onClick={() => handleAgentClick(agent)}
+                      aria-disabled={loadingAgentId === agent.agent_id}
+                      className="cursor-pointer w-max"
+                    >
+                      {agent.agent_name}
                     </SidebarMenuSubButton>
                   </SidebarMenuSubItem>
                 ))}

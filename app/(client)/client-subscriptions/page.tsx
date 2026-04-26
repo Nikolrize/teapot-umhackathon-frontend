@@ -44,7 +44,7 @@ export default function CRMSubscriptions() {
                       {item?.price}
                     </span>
                     <span className="text-muted-foreground text-xs">
-                      /month
+                      / token
                     </span>
                   </div>
 
