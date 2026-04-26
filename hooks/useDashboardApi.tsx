@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetcher } from "./fetcher";
-import { Dashboard } from "@/types/client-types";
+import { Dashboard, DashboardContent } from "@/types/client-types";
 
 export const useGetDashboard = (projectId: string) =>
   useQuery<Dashboard>({
@@ -12,7 +12,7 @@ export const useGetDashboard = (projectId: string) =>
 export const useAddToDashboard = () => {
   const queryClient = useQueryClient();
   return useMutation<
-    unknown,
+    DashboardContent,
     Error,
     { project_id: string; user_id: string; prompt_id: string; content: string }
   >({
@@ -29,9 +29,36 @@ export const useAddToDashboard = () => {
   });
 };
 
+export const useReorderDashboard = (project_id: string) => {
+  const queryClient = useQueryClient();
+
+  return useMutation<
+    DashboardContent,
+    Error,
+    { content_id: number; new_index: number }
+  >({
+    mutationFn: async ({ content_id, new_index }) => {
+      return fetcher(`/client/dashboard/content/${content_id}/reorder`, {
+        method: "POST",
+        body: JSON.stringify({ new_index }),
+      });
+    },
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["dashboard", project_id],
+      });
+    },
+  });
+};
+
 export const useDeleteDashboardContent = () => {
   const queryClient = useQueryClient();
-  return useMutation<unknown, Error, { content_id: string; project_id: string }>({
+  return useMutation<
+    DashboardContent,
+    Error,
+    { content_id: string; project_id: string }
+  >({
     mutationFn: ({ content_id }) =>
       fetcher(`/client/dashboard/content/${content_id}/delete`, {
         method: "POST",

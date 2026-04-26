@@ -1,7 +1,12 @@
+"use client";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import { useGetLeadsOverview } from "@/hooks/useStats";
 
 export default function CRMDashboard() {
+  const { data: leads, isLoading } = useGetLeadsOverview();
+
   return (
     <div className="flex flex-col items-center px-20 py-4">
       <div className="flex flex-col w-[70vw] gap-4">

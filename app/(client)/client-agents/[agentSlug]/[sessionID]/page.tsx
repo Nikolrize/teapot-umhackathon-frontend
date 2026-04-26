@@ -145,7 +145,8 @@ export default function AgentSession({ resizeMode }: { resizeMode?: boolean }) {
       }
 
       const chatText =
-        textToSend || "Please analyze the uploaded file(s) and provide insights.";
+        textToSend ||
+        "Please analyze the uploaded file(s) and provide insights.";
       const data = await sendMsg({ message: chatText });
 
       setMessages((prev) => [
@@ -265,7 +266,9 @@ export default function AgentSession({ resizeMode }: { resizeMode?: boolean }) {
                       >
                         <CardContent className="flex items-center gap-2">
                           <span className="truncate">{file.name}</span>
-                          <Badge variant="secondary">{getFileLabel(file)}</Badge>
+                          <Badge variant="secondary">
+                            {getFileLabel(file)}
+                          </Badge>
                         </CardContent>
                       </Card>
                     ))}
@@ -475,9 +478,7 @@ export default function AgentSession({ resizeMode }: { resizeMode?: boolean }) {
         </Card>
       </div>
 
-      {refOpen && (
-        <ReferenceSheet references={references} userId={userId} />
-      )}
+      {refOpen && <ReferenceSheet references={references} userId={userId} />}
     </div>
   );
 }
@@ -490,10 +491,10 @@ function ReferenceSheet({
   userId: string;
 }) {
   return (
-    <div className="flex-1 flex flex-col gap-4 border-1 h-full p-4 bg-card min-w-[15vw] w-full">
+    <div className="flex-1 flex flex-col gap-4 border-1 h-full p-4 bg-card min-w-[15vw] w-full min-h-0">
       <Label className="font-semibold text-brand-primary">References</Label>
 
-      <div className="flex flex-col gap-4 h-full overflow-y-auto">
+      <div className="overflow-y-auto h-full space-y-4">
         {references.length === 0 ? (
           <span className="text-xs text-muted-foreground mt-2">
             No references yet
