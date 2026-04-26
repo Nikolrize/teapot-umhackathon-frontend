@@ -33,10 +33,9 @@ export default function AddPackageDialog({ children }: Props) {
     resolver: zodResolver(packageSchema),
     defaultValues: {
       name: "",
-      description: "",
-      token: 0,
+      setting_key: "",
+      setting_value: 0,
       price: 0,
-      features: [{ value: "" }],
     },
   });
 
@@ -48,23 +47,12 @@ export default function AddPackageDialog({ children }: Props) {
     formState: { errors, isSubmitting },
   } = form;
 
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: "features",
-  });
-
   const onSubmit = async (data: FormValues) => {
     try {
-      const payload = {
-        ...data,
-        features: data.features.map((f) => f.value),
-      };
-
-      console.log(payload); // API call here
+      // API call here
 
       toast.success(`"${data.name}" created successfully`);
 
-      // ✅ reset + close
       reset();
       setOpen(false);
     } catch (err) {
@@ -97,27 +85,16 @@ export default function AddPackageDialog({ children }: Props) {
               )}
             </div>
 
-            {/* Description */}
-            <div className="flex flex-col gap-2">
-              <Label>Description</Label>
-              <Input {...register("description")} />
-              {errors.description && (
-                <p className="text-destructive text-sm">
-                  {errors.description.message}
-                </p>
-              )}
-            </div>
-
             {/* Token */}
             <div className="flex flex-col gap-2">
               <Label>Tokens</Label>
               <Input
                 type="number"
-                {...register("token", { valueAsNumber: true })}
+                {...register("setting_value", { valueAsNumber: true })}
               />
-              {errors.token && (
+              {errors.setting_value && (
                 <p className="text-destructive text-sm">
-                  {errors.token.message}
+                  {errors.setting_value.message}
                 </p>
               )}
             </div>
@@ -139,49 +116,6 @@ export default function AddPackageDialog({ children }: Props) {
               {errors.price && (
                 <p className="text-destructive text-sm">
                   {errors.price.message}
-                </p>
-              )}
-            </div>
-
-            {/* Features */}
-            <div className="flex flex-col gap-2">
-              <Label>Features</Label>
-
-              {fields.map((field, index) => (
-                <div key={field.id} className="flex flex-col gap-1">
-                  <div className="flex gap-2">
-                    <Input
-                      {...register(`features.${index}.value`)}
-                      placeholder={`Feature ${index + 1}`}
-                    />
-                    <Button
-                      type="button"
-                      variant="destructive"
-                      onClick={() => remove(index)}
-                    >
-                      Remove
-                    </Button>
-                  </div>
-
-                  {errors.features?.[index]?.value && (
-                    <p className="text-destructive text-sm">
-                      {errors.features[index]?.value?.message}
-                    </p>
-                  )}
-                </div>
-              ))}
-
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => append({ value: "" })}
-              >
-                + Add Feature
-              </Button>
-
-              {errors.features?.message && (
-                <p className="text-destructive text-sm">
-                  {errors.features.message}
                 </p>
               )}
             </div>

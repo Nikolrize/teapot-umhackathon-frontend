@@ -5,7 +5,7 @@ import { fetcher } from "./fetcher";
 
 export const useGetUserById = (searchTerm: string) => {
   return useQuery<User>({
-    queryKey: ["user", searchTerm],
+    queryKey: ["users", searchTerm],
     queryFn: () => fetcher(`/api/user/get/${searchTerm}`),
     enabled: !!searchTerm,
   });
@@ -59,7 +59,7 @@ export const useUpdateUser = () => {
     },
 
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["user"] });
+      queryClient.invalidateQueries({ queryKey: ["users"] });
     },
   });
 };
@@ -74,7 +74,7 @@ export const useDeleteUser = () => {
       }),
 
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["user"] });
+      queryClient.invalidateQueries({ queryKey: ["users"] });
     },
   });
 };
