@@ -1,9 +1,12 @@
 ## Hackathon Details
 Pitch Deck URL
+
 Backend Repo URL: https://github.com/Nikolrize/teapot-umhackathon-backend
+
 Frontend Repo URL: https://github.com/Nikolrize/teapot-umhackathon-frontend
 
 Backend Deploy URL: teapot-umhackathon-backend.onrender.com
+
 Frontend Deploy URL: teapot-umhackathon-frontend.vercel.app
 
 PRD, SAD, UATD: can be found in the repo root
